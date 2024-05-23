@@ -22,223 +22,223 @@ subprojects {
 project(':fpinjava-common') {
 
   dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-introduction') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-usingfunctions-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-usingfunctions-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-makingjavafunctional-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-makingjavafunctional-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-recursion-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
   }
 }
 
 project(':fpinjava-recursion-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
   }
 }
 
 project(':fpinjava-lists-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-lists-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-optionaldata-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-optionaldata-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-handlingerrors-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-handlingerrors-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-advancedlisthandling-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-advancedlisthandling-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-laziness-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-laziness-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-trees-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-trees-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-advancedtrees-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-advancedtrees-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-state-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-state-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-io-exercises') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-io-solutions') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-actors') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
 
 project(':fpinjava-applications') {
 
   dependencies {
-    compile project(':fpinjava-common')
-    compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    implementation project(':fpinjava-common')
+    implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6'
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
