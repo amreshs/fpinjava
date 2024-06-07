@@ -5,6 +5,8 @@ public interface Function<T, U> {
   U apply(T arg);
 
   static <T, U, V> Function<Function<U, V>, Function<Function<T, U>, Function<T, V>>> higherCompose() {
-    throw new RuntimeException("To be implemented.");
+     // return f1 -> f2 -> arg-> f1.apply(f2.apply(arg));
+      
+      return (Function<U,V> f1) -> (Function<T, U> f2) -> (T arg) -> f1.apply(f2.apply(arg));
   }
 }
