@@ -1,6 +1,10 @@
 package com.fpinjava.makingjavafunctional.exercise03_09;
 
 import com.fpinjava.common.Function;
+import static com.fpinjava.makingjavafunctional.exercise03_05.Fold.add;
+import static com.fpinjava.makingjavafunctional.exercise03_05.Fold.fold;
+import static com.fpinjava.makingjavafunctional.exercise03_07.CollectionUtilities.rightOpr;
+import static com.fpinjava.makingjavafunctional.exercise03_08.CollectionUtilities.foldRight;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,11 +73,23 @@ public class CollectionUtilities {
     return Collections.unmodifiableList(ts);
   }
 
-  public static <T> List<T> prepend(T t, List<T> list) {
-    throw new RuntimeException("To be implemented");
+  public static <T> List<T> prepend(T t, List<T> lst) {
+    return foldLeft(lst, list(t), a->b->append(a,b));
   }
 
-  public static <T> List<T> reverse(List<T> list) {
-    throw new RuntimeException("To be implemented");
+  public static <T> List<T> reverse(List<T> lst) {
+    //return foldLeft(lst, list(), a->b->prepend(a,b));
+    return foldLeft(lst, list(), a -> b -> foldLeft(a, list(b), x -> y -> append(x,y) ));
   }
+  
+  public static void main(String[] args){
+        List<Integer> lst = Arrays.asList(1, 2, 3, 4, 5);//("1", "2","3", "4");
+
+        //List<String> lst_tail = CollectionUtilities.tail(lst);
+        
+        List<Integer> lstRv = CollectionUtilities.reverse(lst);
+        
+        for(Integer i:lstRv)
+            System.out.println(i);
+    }
 }

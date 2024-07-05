@@ -1,6 +1,46 @@
 package com.fpinjava.makingjavafunctional.exercise03_01;
 
-public interface Result<T> {
+public interface Result<T>{
+
+    static <T> Result<T> success(T t){
+        return new Success <> (t);
+    }
+
+    public static Result<String> failure(String errMessage){
+        return new Failure<>(errMessage);
+    }
+
+    public void bind(Effect<T> success, Effect<String> error);
+    public class Success<T> implements Result<T>{
+
+        private final T value;
+
+        Success(T t){
+            this.value = t;
+        }
+
+        @Override
+        public void bind(Effect<T> success, Effect<String> errorMessage){
+            success.apply(value);
+        }
+    };
+
+    public class Failure<T> implements Result<T>{
+
+        private final String errorMessage;
+
+        Failure(String errMsg){
+            this.errorMessage = errMsg;
+        }
+
+        @Override
+        public void bind(Effect<T> success, Effect<String> failure){
+            failure.apply(errorMessage);
+        }
+    };
+};
+
+/*public interface Result<T> {
 
   void bind(Effect<T> success, Effect<String> failure);
 
@@ -41,3 +81,4 @@ public interface Result<T> {
   }
 
 }
+*/

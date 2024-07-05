@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 
+
 public class CollectionUtilities {
 
   public static <T> List<T > list() {

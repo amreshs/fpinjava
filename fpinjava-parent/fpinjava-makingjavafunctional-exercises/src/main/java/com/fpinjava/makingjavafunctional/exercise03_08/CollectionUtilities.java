@@ -1,6 +1,9 @@
 package com.fpinjava.makingjavafunctional.exercise03_08;
 
 import com.fpinjava.common.Function;
+import static com.fpinjava.makingjavafunctional.exercise03_05.Fold.add;
+import static com.fpinjava.makingjavafunctional.exercise03_05.Fold.fold;
+import static com.fpinjava.makingjavafunctional.exercise03_07.CollectionUtilities.rightOpr;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +61,13 @@ public class CollectionUtilities {
 
   public static <T, U> U foldRight(List<T> ts, U identity,
                                    Function<T, Function<U, U>> f) {
-    throw new RuntimeException("To be implemented");
+      U newIdentity = identity;
+      if(ts != null && !ts.isEmpty()){
+        //newIdentity = foldRight(tail(ts), identity, f);
+        newIdentity = f.apply(head(ts)).apply(foldRight(tail(ts), identity, f));
+      }
+      
+      return newIdentity;
   }
 
   public static <T> List<T> append(List<T> list, T t) {
@@ -66,4 +75,17 @@ public class CollectionUtilities {
     ts.add(t);
     return Collections.unmodifiableList(ts);
   }
+  
+  public static void main(String[] args){
+        List<Integer> lst = Arrays.asList(1, 2, 3, 4);//("1", "2","3", "4");
+
+        //List<String> lst_tail = CollectionUtilities.tail(lst);
+        
+        Integer addedValue = fold(lst, 0, add);
+        System.out.println("Value after fold left " + addedValue);
+        
+        
+        String leftOpStr = foldRight(lst, "0", rightOpr);
+        System.out.println(leftOpStr);
+    }
 }
