@@ -81,11 +81,42 @@ public class CollectionUtilities {
     return foldLeft(list, list(), x -> y -> foldLeft(x, list(y), a -> b -> append(a, b)));
   }
 
-  public static <T, U> List<U> mapViaFoldLeft(List<T> list, Function<T, U> f) {
-    throw new RuntimeException("To be implemented");
+  public static <T, U> U mapAccessories(List<T> t, U lstIdentity, Function<T, U> f){
+      //return foldLeft(t, lstIdentity, a -> b -> a.append(f.apply(b)));
+      
+      throw new RuntimeException("To be implemented");
+  }
+  public static <T, U> List<U> mapViaFoldLeft(List<T> lst, Function<T, U> f) {
+     //Function<List<U>, Function<T,U>> wrapper = a -> b -> a.append(f.apply(b));
+     //return foldLeft(lst, list(), a -> b -> foldLeft(list(f.apply(b)), a, x -> y -> append(x, y)));
+     return foldLeft(lst, list(), a -> b -> append(a, f.apply(b)));
   }
 
-  public static <T, U> List<U> mapViaFoldRight(List<T> list, Function<T, U> f) {
-    throw new RuntimeException("To be implemented");
+  public static <T> List<T> prepend(List<T> lst, T t){
+      return foldLeft(lst, list(t), a -> b -> append(a, b));
   }
+  
+  public static <T, U> List<U> mapViaFoldRight(List<T> lst, Function<T, U> f) {
+    return foldRight(lst, list(), a -> b -> prepend(b, f.apply(a)));
+  }
+
+  public static void main(String [] args){
+      Function<Integer, Double> fun = a-> a *10.1; 
+  
+      List<Integer> lst = Arrays.asList(1, 2, 3, 4, 5);//("1", "2","3", "4");
+       
+      System.out.println("Map implementation using foldLeft");
+      List<Double> lstRv = CollectionUtilities.mapViaFoldLeft(lst, fun);
+      for(Double d:lstRv)
+            System.out.println(d);
+      
+      
+      System.out.println("Map implementation using foldRight");
+      lstRv = CollectionUtilities.mapViaFoldRight(lst, fun);
+      for(Double d:lstRv)
+            System.out.println(d);
+  }
+
 }
+
+

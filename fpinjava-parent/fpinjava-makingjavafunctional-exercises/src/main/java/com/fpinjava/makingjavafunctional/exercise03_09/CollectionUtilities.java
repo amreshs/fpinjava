@@ -82,14 +82,24 @@ public class CollectionUtilities {
     return foldLeft(lst, list(), a -> b -> foldLeft(a, list(b), x -> y -> append(x,y) ));
   }
   
+  public static <T> List<T> reverseUsingFoldRight(List<T> lst) {
+    //return foldLeft(lst, list(), a->b->prepend(a,b));
+    return foldRight(lst, list(), a -> b -> append(b,a));
+  }
+  
   public static void main(String[] args){
         List<Integer> lst = Arrays.asList(1, 2, 3, 4, 5);//("1", "2","3", "4");
 
         //List<String> lst_tail = CollectionUtilities.tail(lst);
         
+        System.out.println("Reverse Using FoldLeft");
         List<Integer> lstRv = CollectionUtilities.reverse(lst);
-        
         for(Integer i:lstRv)
             System.out.println(i);
-    }
+    
+        System.out.println("Reverse Using FoldRight");
+        lstRv = CollectionUtilities.reverse(lst);
+        for(Integer i:lstRv)
+            System.out.println(i);
+  }
 }

@@ -104,7 +104,13 @@ public class CollectionUtilities {
   }
 
   public static List<Integer> range(int start, int end) {
-    throw new RuntimeException("To be implemented");
+      
+      return unfold(start, a -> a + 1, b -> b < end);
   }
 
+  public static void main(String [] args){
+      List<Integer> lst = range(5, 11);
+      for(Integer l : lst)
+          System.out.println(l);
+  }
 }
