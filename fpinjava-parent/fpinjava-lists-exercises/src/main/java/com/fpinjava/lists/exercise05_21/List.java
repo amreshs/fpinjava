@@ -20,7 +20,7 @@ public abstract class List<A> {
   public abstract <B> B foldLeft(B identity, Function<B, Function<A, B>> f);
 
   public <B> List<B> flatMap(Function<A, List<B>> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight(list(), h -> t -> concat(f.apply(h), t));
   }
 
   public List<A> filter(Function<A, Boolean> f) {
@@ -218,5 +218,12 @@ public abstract class List<A> {
 
   public static <A> List<A> flatten(List<List<A>> list) {
     return foldRight(list, List.<A>list(), x -> y -> concat(x, y));
+  }
+  
+  public static void main(String [] args){
+      List<Double> lst = List.list(1.0, 2.0, 3.0);
+      
+      System.out.println(lst);
+      System.out.println(lst.flatMap(x-> list(x, -x)));
   }
 }

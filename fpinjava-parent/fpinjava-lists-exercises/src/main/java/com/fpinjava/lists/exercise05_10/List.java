@@ -169,8 +169,21 @@ public abstract class List<A> {
 
     @Override
     public <B> B foldLeft(B identity, Function<B, Function<A, B>> f) {
-      throw new RuntimeException("To be implemented");
+      return foldLeft_(this, identity, f).eval();
     }
+    
+    
+    private <B> TailCall<B> foldLeft_(List<A> lst, B identity, Function<B, Function<A,B>> fun){
+      return lst.isEmpty()? ret(identity) : sus(() -> foldLeft_(lst.tail(), fun.apply(identity).apply(lst.head()), fun)); 
+    }
+    
+    
+    /*
+    private <B> TailCall<B> foldLeft_(B acc, List<A> list, Function<B, Function<A, B>> f) {
+      return list.isEmpty()
+          ? ret(acc)
+          : sus(() -> foldLeft_(f.apply(acc).apply(list.head()), list.tail(), f));
+    }*/
   }
 
   @SuppressWarnings("unchecked")

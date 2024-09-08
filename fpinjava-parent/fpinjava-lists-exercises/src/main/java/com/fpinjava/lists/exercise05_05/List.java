@@ -14,6 +14,7 @@ public abstract class List<A> {
   public abstract List<A> setHead(A h);
   public abstract List<A> drop(int n);
   public abstract List<A> dropWhile(Function<A, Boolean> f);
+  public abstract List<A> concat(List<A> lst2);
 
   public List<A> cons(A a) {
     return new Cons<>(a, this);
@@ -56,7 +57,12 @@ public abstract class List<A> {
 
     @Override
     public List<A> dropWhile(Function<A, Boolean> f) {
-      throw new RuntimeException("To be implemented");
+      return this;
+    }
+    
+    @Override
+    public List<A> concat(List<A> lst2){
+        return lst2;
     }
   }
 
@@ -112,7 +118,20 @@ public abstract class List<A> {
 
     @Override
     public List<A> dropWhile(Function<A, Boolean> f) {
-      throw new RuntimeException("To be implemented");
+      return dropWhile(this, f).eval();
+    }
+    
+    private TailCall<List<A>> dropWhile(List<A> lst, Function<A, Boolean> f) {
+      return lst.isEmpty() || !f.apply(lst.head())? TailCall.ret(lst) : TailCall.sus(() -> dropWhile(lst.tail(), f));
+    }
+    
+    @Override
+    public List<A> concat(List<A> lst2){
+        return concat(this, lst2);
+    }
+    
+    private List<A> concat(List<A> lst1, List<A> lst2){
+        return lst1.isEmpty()? lst2 : new Cons(lst1.head(),concat(lst1.tail(), lst2));
     }
   }
 
@@ -128,5 +147,16 @@ public abstract class List<A> {
       n = new Cons<>(a[i], n);
     }
     return n;
+  }
+  
+  public static Function<String, Boolean> blankCheck = str -> !str.isBlank(); 
+  
+  public static void main(String [] args){
+      List<String> lst = list("ABC", "PQR", "");
+      List<String> lst2 = list("Amit", "Monica", "Aakanksha", "Aastha");
+      System.out.println(lst);
+      //System.out.println(lst.dropWhile(blankCheck));
+      System.out.println((lst.concat(lst2)).toString());
+      
   }
 }

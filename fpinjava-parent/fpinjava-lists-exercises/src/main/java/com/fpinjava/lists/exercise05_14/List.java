@@ -20,7 +20,11 @@ public abstract class List<A> {
   public abstract <B> B foldLeft(B identity, Function<B, Function<A, B>> f);
 
   public <B> B foldRight(B identity, Function<A, Function<B, B>> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight_(identity, this.reverse(), f).eval();
+  }
+  
+  public <B> TailCall<B> foldRight_(B identity, List<A> lst, Function<A, Function<B, B>> f) {
+    return lst.isEmpty()? ret(identity) : sus(() -> foldRight_(f.apply(lst.head()).apply(identity), lst.tail(), f));
   }
 
   public List<A> cons(A a) {
@@ -198,5 +202,25 @@ public abstract class List<A> {
 
   public static <A, B> B foldRight(List<A> list, B n, Function<A, Function<B, B>> f ) {
     return list.foldRight(n, f);
+  }
+  
+  public static Integer sumViaFoldRight(List<Integer> lst) {
+    return foldRight(lst, 0, x->y->x+y);
+  }
+
+  public static Double productViaFoldRight(List<Double> lst) {
+    return foldRight(lst, 1.0, x->y->x*y);
+  }
+
+  public static <A> Integer lengthViaFoldRight(List<A> lst) {
+    return foldRight(lst, 0, x->y->y+1);
+  }
+  
+  public static void main(String[] args){
+      List<Integer> lst = List.list(1, 2, 3, 4, 5);
+      List<Double> lstDbl = List.list(1.0, 2.0, 3.0, 4.0, 5.0);
+      System.out.println("Sum of list ="+sumViaFoldRight(lst));
+      System.out.println("Product of list ="+productViaFoldRight(lstDbl));
+      System.out.println("Length of list ="+lengthViaFoldRight(lst));
   }
 }

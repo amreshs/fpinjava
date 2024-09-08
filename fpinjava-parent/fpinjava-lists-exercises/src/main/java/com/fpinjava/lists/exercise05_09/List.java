@@ -176,10 +176,34 @@ public abstract class List<A> {
     return n;
   }
 
+  /*
   public static <A, B> B foldRight(List<A> list, B n,
                                    Function<A, Function<B, B>> f ) {
     return list.isEmpty()
         ? n
         : f.apply(list.head()).apply(foldRight(list.tail(), n, f));
   }
+ */ 
+  public static<A,B> B foldRight(List<A> lst, B identity, Function<A, Function<B,B>> fun){
+      return lst.isEmpty()? identity :
+              fun.apply(lst.head()).apply(foldRight(lst.tail(), identity, fun));
+  }
+  
+  private static Function<Integer, Function<Integer, Integer>> plus_one = x -> y -> y + 1;
+  
+  public static<A> Integer listLength(List<A> lst){
+  
+      return foldRight(lst, 0, x -> y -> y + 1);
+  
+  }
+ 
+  public static Function<List<Integer>, Integer> listLength = 
+          lst -> foldRight(lst, 0, plus_one);
+          
+  public static void main(String[] args){
+      List<Integer> lst = List.list(1, 2, 3, 4, 5);
+      System.out.println("Length of list ="+listLength.apply(lst));
+      System.out.println("Length of list ="+listLength(lst));
+  }
+
 }

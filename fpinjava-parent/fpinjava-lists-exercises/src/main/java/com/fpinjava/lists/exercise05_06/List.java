@@ -63,12 +63,12 @@ public abstract class List<A> {
 
     @Override
     public List<A> reverse() {
-      throw new RuntimeException("To be implemented");
+      return this;
     }
 
     @Override
     public List<A> init() {
-      throw new RuntimeException("To be implemented");
+      return this;
     }
   }
 
@@ -136,12 +136,22 @@ public abstract class List<A> {
 
     @Override
     public List<A> reverse() {
-      throw new RuntimeException("To be implemented");
+      return reverse_(this, list()).eval();
+    }
+    
+    
+    private TailCall<List<A>> reverse_(List<A> lst1, List<A> acc){
+        return lst1.isEmpty()? ret(acc) : sus(() -> reverse_(lst1.tail(), new Cons(lst1.head(),acc)));
     }
 
     @Override
     public List<A> init() {
-      throw new RuntimeException("To be implemented");
+      //return (reverse().drop(1)).reverse();
+      return reverse().tail().reverse();
+    }
+    
+    private List<A> init(List<A> lst){
+        return lst.tail().isEmpty()? list() : new Cons(lst.head(), init(lst.tail()));
     }
   }
 
@@ -157,5 +167,14 @@ public abstract class List<A> {
       n = new Cons<>(a[i], n);
     }
     return n;
+  }
+  
+  public static void main(String [] args){
+      List<String> lst = list("ABC", "PQR", "XYZ");
+      List<String> lst2 = list("Amit", "Monica", "Aakanksha", "Aastha", "ABARAKADABARA");
+      System.out.println(lst);
+      System.out.println(lst.init().toString());
+      System.out.println(lst2.init().toString());
+      
   }
 }

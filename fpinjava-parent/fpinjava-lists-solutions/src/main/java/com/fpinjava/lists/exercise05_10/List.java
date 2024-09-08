@@ -197,4 +197,10 @@ public abstract class List<A> {
         ? n
         : f.apply(list.head()).apply(foldRight(list.tail(), n, f));
   }
+  
+  public static void main(String[] args){
+      List<Integer> lst = List.list(1, 2, 3, 4, 5);
+      System.out.println("Length of list ="+ lst.foldLeft(0, x->y->x+1));
+      System.out.println("Product of list ="+lst.foldLeft(1, x->y->x*y));
+  }
 }

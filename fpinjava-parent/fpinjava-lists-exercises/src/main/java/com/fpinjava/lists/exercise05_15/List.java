@@ -201,6 +201,22 @@ public abstract class List<A> {
   }
 
   public static <A> List<A> concat(List<A> list1, List<A> list2) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight(list1, list2, x -> y -> new Cons(x,y));
+ }
+  
+   public static <A> List<A> concatViaFoldLeft(List<A> list1, List<A> list2) {
+    return list1.reverse().foldLeft(list2, x->y->x.cons(y));
   }
+  
+   public static void main(String [] args){
+      List<String> lst = List.list("ABC", "PQR", "XYZ");
+      List<String> lst2 = List.list("Amit", "Monica", "Aakanksha", "Aastha", "ABARAKADABARA");
+
+      System.out.println(lst);
+      System.out.println(concat(lst,lst2).toString());
+      System.out.println(concatViaFoldLeft(lst, lst2).toString());
+
+      //System.out.println(lst2.init().toString());
+  }
+  
 }

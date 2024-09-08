@@ -204,7 +204,19 @@ public abstract class List<A> {
     return foldRight(list1, list2, x -> y -> new Cons<>(x, y));
   }
 
-  public static <A> List<A> flatten(List<List<A>> list) {
-    throw new IllegalStateException("To be implemented");
+  public static <A> List<A> flatten(List<List<A>> lst) {
+        return lst.foldLeft(list(), x->y->concat(x,y));
+  }
+  
+   public static void main(String [] args){
+      List<String> lst = List.list("ABC", "PQR", "XYZ");
+      List<String> lst2 = List.list("Amit", "Monica", "Aakanksha", "Aastha", "ABARAKADABARA");
+      
+      List<List<String>> lst_fnl = List.list(lst,lst2,lst);
+
+      System.out.println(lst);
+      System.out.println(flatten(lst_fnl).toString());
+      //System.out.println(concatViaFoldLeft(lst, lst2).toString());
+      //System.out.println(lst2.init().toString());
   }
 }

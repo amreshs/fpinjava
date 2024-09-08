@@ -17,7 +17,7 @@ public class Corecursion {
   public static String fiboCorecursive(int number) {
     Tuple<BigInteger, BigInteger> seed = new Tuple<>(BigInteger.ZERO, BigInteger.ONE);
     Function<Tuple<BigInteger, BigInteger>,Tuple<BigInteger, BigInteger>> f = x -> new Tuple<>(x._2, x._1.add(x._2));
-    List<BigInteger> list = CollectionUtilities.map(com.fpinjava.common.List<Tuple<BigInteger, BigInteger>>com.fpinjava.common.List.iterate(seed, f, number + 1), x -> x._1);
-    return Memoization.makeString(list, ", ");
+    List<BigInteger> lst = CollectionUtilities.map(com.fpinjava.common.List.iterate(seed, f, number + 1), x -> x._1);
+    return Memoization.makeString(lst, ", ");
    }
 }

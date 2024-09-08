@@ -1,6 +1,6 @@
 package com.fpinjava.lists.exercise05_02;
 
-
+import com.fpinjava.common.Function;
 public abstract class List<A> {
 
   public abstract A head();
@@ -35,7 +35,7 @@ public abstract class List<A> {
 
     @Override
     public List<A> setHead(A h) {
-      throw new RuntimeException("To be implemented");
+      throw new IllegalStateException("setHead called en empty list");
     }
   }
 
@@ -63,7 +63,7 @@ public abstract class List<A> {
 
     @Override
     public List<A> setHead(A h) {
-      throw new RuntimeException("To be implemented");
+      return new Cons<>(h, tail);
     }
   }
 
@@ -80,4 +80,12 @@ public abstract class List<A> {
     }
     return n;
   }
+  
+  public static Function<List<Integer>, String> changeToString = lst -> lst.isEmpty()? "" : lst.head()+"," + List.changeToString.apply(lst.tail());
+    
+    public static void main(String[] args){
+        List<Integer> lst = list(1, 2, 3, 4, 5);
+        lst = lst.setHead(0);
+        System.out.println(List.changeToString.apply(lst));
+    }
 }
