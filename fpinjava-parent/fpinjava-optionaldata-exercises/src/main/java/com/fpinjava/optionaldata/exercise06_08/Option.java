@@ -91,6 +91,12 @@ public abstract class Option<A> {
   }
 
   public static <A, B> Function<Option<A>, Option<B>> lift(Function<A, B> f) {
-    throw new IllegalStateException("Not implemented yet");
+    return x -> x.map(f);
+  }
+
+  public static void main(String[] args) {
+    Option<Integer> optionNumber = Option.some(100);
+    Function<Option<Integer>, Option<String>> stringValue = lift(Integer::toBinaryString);
+    System.out.println(stringValue.apply(optionNumber));
   }
 }

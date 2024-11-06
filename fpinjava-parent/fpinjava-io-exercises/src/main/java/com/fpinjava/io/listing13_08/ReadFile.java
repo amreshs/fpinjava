@@ -15,7 +15,7 @@ public class ReadFile {
   public static void main(String... args) {
     Result<Input> rInput = FileReader.fileReader(path);
 
-    Result<Stream<Person>> rStream = rInput.map(input -> Stream.unfold(input, ReadFile::person));
+    Result<Stream<Person>> rStream = rInput.map(input -> Stream.unfold(input, input1 -> person(input1)));
     rStream.forEachOrFail(stream -> stream.toList().forEach(System.out::println)).forEach(System.out::println);
   }
 

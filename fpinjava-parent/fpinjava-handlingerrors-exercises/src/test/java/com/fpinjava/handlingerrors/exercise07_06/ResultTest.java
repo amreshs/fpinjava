@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.fpinjava.common.Function;
 
+
+
 public class ResultTest {
 
   Result<Integer> empty = Result.empty();

@@ -12,7 +12,7 @@ public class ElementName {
   }
 
   public static ElementName apply(String value) {
-    return new ElementName(Result.of(ElementName::isValidName, value, "Invalid element name: " + value));
+    return new ElementName(Result.of(path -> isValidName(path), value, "Invalid element name: " + value));
   }
 
   private static boolean isValidName(String path) {

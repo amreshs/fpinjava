@@ -1,7 +1,7 @@
 package com.fpinjava.optionaldata.exercise06_02;
 
-
 import com.fpinjava.common.Supplier;
+import com.fpinjava.lists.exercise05_21.List;
 
 public abstract class Option<A> {
 
@@ -14,7 +14,7 @@ public abstract class Option<A> {
    After solving the exercise, uncomment the corresponding lines in
    exercise 06_2.OptionTest
    */
-  public abstract A getOrElse(A defaultValue);
+  public abstract A getOrElse(Supplier<A> defaultValue);
 
   private static class None<A> extends Option<A> {
 
@@ -26,8 +26,8 @@ public abstract class Option<A> {
     }
 
     @Override
-    public A getOrElse(A defaultValue) {
-      throw new IllegalStateException("Not implemented yet");
+    public A getOrElse(Supplier<A> defaultValue) {
+      return defaultValue.get();
     }
 
     @Override
@@ -49,8 +49,8 @@ public abstract class Option<A> {
       return this.value;
     }
 
-    public A getOrElse(A defaultValue) {
-      throw new IllegalStateException("Not implemented yet");
+    public A getOrElse(Supplier<A> defaultValue) {
+      return this.value;
     }
 
     @Override
@@ -67,4 +67,19 @@ public abstract class Option<A> {
   public static <A> Option<A> none() {
     return none;
   }
+
+  public static <A> A getDefault() {
+    throw new IllegalStateException("getDefault called on None");
+  }
+
+  public static<A extends Comparable<A>> Option<A> min(List<A> lst){
+    return (lst.isEmpty() ? Option.none() : Option.some(lst.tail().foldLeft(lst.head(), acc->y-> acc.compareTo(y) < 0? acc : y)));
+  }
+  public static void min(String[] args){
+    List<Integer> lst = List.list(10,6,3,7,5,6);
+    System.out.println(min(lst).getOrElse(() -> Option.getDefault()));
+    min(List.<Integer>list()).getOrElse(() -> Option.getDefault());
+  }
 }
+
+

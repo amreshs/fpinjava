@@ -52,7 +52,7 @@ public abstract class IO<A> {
     }
 
   public <B> IO<B> map(Function<A, B> f) {
-    return flatMap(f.andThen(Return::new));
+    return flatMap(f.andThen(value -> new Return<B>(value)));
   }
 
   @SuppressWarnings("unchecked")
@@ -69,14 +69,14 @@ public abstract class IO<A> {
   }
 
   static <A> IO<Nothing> doWhile(IO<A> iot, Function<A, IO<Boolean>> f) {
-    return iot.flatMap(f::apply)
+    return iot.flatMap(arg -> f.apply(arg))
               .flatMap(ok -> ok
                   ? doWhile(iot, f)
                   : EMPTY);
   }
 
   static <A> IO<Nothing> repeat(int n, IO<A> io) {
-    return forEach(Stream.fill(n, () -> io), IO::skip);
+    return forEach(Stream.fill(n, () -> io), a -> skip(a));
   }
 
   static <A, B> IO<B> forever(IO<A> ioa) {
@@ -107,7 +107,7 @@ public abstract class IO<A> {
   }
 
   static <A> IO<Nothing> sequence(Stream<IO<A>> stream) {
-    return forEach(stream, IO::skip);
+    return forEach(stream, a -> skip(a));
   }
 
   @SafeVarargs

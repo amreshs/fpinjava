@@ -22,7 +22,7 @@ public class ListTest {
 
     ExecutorService es = Executors.newFixedThreadPool(numberOfThreads);
 
-    Function<Long, Long> f = ListTest::fibo;
+    Function<Long, Long> f = x1 -> fibo(x1);
 
     Function<BigInteger, Function<Long, BigInteger>> g = x -> y -> x.add(BigInteger.valueOf(y));
 

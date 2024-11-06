@@ -25,6 +25,6 @@ public class RandomTest {
   public void testFlatMap() {
     RNG rng = JavaRNG.rng(0);
     Tuple<List<Integer>, RNG> result = makeListOfNonMultipleOfFive(300).apply(rng);
-    assertTrue(result._1.forAll(RandomTest::notMultipleOfFive));
+    assertTrue(result._1.forAll(i -> notMultipleOfFive(i)));
   }
 }

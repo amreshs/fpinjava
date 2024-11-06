@@ -3,6 +3,7 @@ package com.fpinjava.optionaldata.exercise06_03;
 
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
+import com.fpinjava.lists.exercise05_21.List;
 
 public abstract class Option<A> {
 
@@ -30,8 +31,9 @@ public abstract class Option<A> {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public <B> Option<B> map(Function<A, B> f) {
-      throw new IllegalStateException("Not implemented yet");
+      return none();
     }
 
     @Override
@@ -58,7 +60,7 @@ public abstract class Option<A> {
     }
 
     public <B> Option<B> map(Function<A, B> f) {
-      throw new IllegalStateException("Not implemented yet");
+      return new Some<>(f.apply(this.value));
     }
 
     @Override
@@ -74,5 +76,11 @@ public abstract class Option<A> {
   @SuppressWarnings("unchecked")
   public static <A> Option<A> none() {
     return none;
+  }
+
+  public static void main(String[] args) {
+    List<Integer> lst = List.<Integer>list(23, 56, 10, 89, 7);
+    List<String> lstStr = lst.map(x->String.format("No:%s", x));
+    System.out.println(lstStr);
   }
 }

@@ -152,7 +152,7 @@ abstract class Stream<A> {
   }
 
   public static <A> Stream<Result<A>> infinite(Stream<A> s) {
-    return s.map(Result::success).append(() -> repeatViaIterate(Result.empty()));
+    return s.map(value -> Result.success(value)).append(() -> repeatViaIterate(Result.empty()));
   }
 
   public Stream<Stream<A>> tails() {

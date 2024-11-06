@@ -24,6 +24,6 @@ public class Payment {
     return payments
         .groupBy(x -> x.creditCard)
         .values()
-        .map(x -> x.reduce(c1 -> c1::combine));
+        .map(x -> x.reduce(c1 -> payment -> c1.combine(payment)));
   }
 }

@@ -2,7 +2,7 @@ package com.fpinjava.optionaldata.exercise06_12;
 
 
 import com.fpinjava.common.Function;
-import com.fpinjava.common.List;
+import com.fpinjava.lists.exercise05_21.List;
 import com.fpinjava.common.Supplier;
 
 public abstract class Option<A> {
@@ -53,6 +53,16 @@ public abstract class Option<A> {
     public String toString() {
       return "None";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+      return obj instanceof None ||this == none();
+    }
+
+    @Override
+    public int hashCode(){
+      return 0;
+    }
   }
 
   private static class Some<A> extends Option<A> {
@@ -79,6 +89,16 @@ public abstract class Option<A> {
     @Override
     public String toString() {
       return String.format("Some(%s)", this.value);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+      return (this == obj || obj instanceof Some) && ((Some<?>)obj).value.equals(this.value);
+    }
+
+    @Override
+    public int hashCode() {
+      return this.value.hashCode();
     }
   }
 
@@ -124,13 +144,25 @@ public abstract class Option<A> {
     return a.flatMap(ax -> b.flatMap(bx -> c.map(cx -> f.apply(ax).apply(bx).apply(cx))));
   }
 
-  public static <A, B> Option<List<B>> traverse(List<A> list,
+  public static <A, B> Option<List<B>> traverse(List<A> lst,
                                                 Function<A, Option<B>> f) {
-    throw new IllegalStateException("Not implemented yet");
+    return lst.foldLeft(Option.some(List.list()), lt->itm->map2(lt, f.apply(itm), a->b->a.cons(b)));
   }
 
-  public static <A> Option<List<A>> sequence(List<Option<A>> list) {
-    throw new IllegalStateException("Not implemented yet");
+  public static <A> Option<List<A>> sequence(List<Option<A>> lst) {
+    //return lst.foldLeft(Option.some(List.list()), lt->itm->map2(lt, itm, a->b->a.cons(b)));
+    return traverse(lst, x -> x);
   }
 
+  public static void main(String[] args) {
+    List<String> lst = List.list("11", "22", "33", "44", "35", "10");
+
+    Function<Integer,Function<String, Integer>> parseInteger = radix -> str -> Integer.parseInt(str, radix);
+    Function<String, Integer> parseInt16 = parseInteger.apply(16);
+
+    Function<String, Option<Integer>> parseInt16Option = Option.hlift(parseInt16);
+    Option<List<Integer>> lstIntOpt = traverse(lst, parseInt16Option);
+
+    System.out.println(lstIntOpt);
+  }
 }

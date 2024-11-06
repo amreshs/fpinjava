@@ -27,7 +27,7 @@ public abstract class List<A> {
   public abstract <B> List<B> flatMap(Function<A, List<B>> f);
 
   public Result<A> lastOption() {
-    return foldLeft(Result.empty(), x -> Result::success);
+    return foldLeft(Result.empty(), x -> value -> Result.success(value));
   }
 
   public Result<A> headOption() {

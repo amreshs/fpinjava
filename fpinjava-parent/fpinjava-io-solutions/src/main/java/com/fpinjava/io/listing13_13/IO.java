@@ -44,7 +44,9 @@ public interface IO<A> {
   }
 
   static <A> IO<Nothing> doWhile(IO<A> ioa, Function<A, IO<Boolean>> f) {
-    return ioa.flatMap(f::apply)
+    return ioa.flatMap(arg -> {
+                return f.apply(arg);
+            })
               .flatMap(ok -> ok
                   ? doWhile(ioa, f)
                   : empty);

@@ -33,7 +33,7 @@ public abstract class List<A> {
   public abstract Result<A> headOption();
 
   public Result<A> lastOption() {
-    return foldLeft(Result.empty(), x -> Result::success);
+    return foldLeft(Result.empty(), x -> value -> Result.success(value));
   }
 
   public List<A> cons(A a) {
@@ -456,7 +456,7 @@ public abstract class List<A> {
     }
 
     private boolean isEquals(Cons<?> o) {
-      Function<Result<A>, Function<Result<?>, Boolean>> equals = x -> y -> x.flatMap(a -> y.map(a::equals)).getOrElse(() -> false);
+      Function<Result<A>, Function<Result<?>, Boolean>> equals = x -> y -> x.flatMap(a -> y.map(obj -> a.equals(obj))).getOrElse(() -> false);
       return zipAll(o).foldRight(true, x -> y -> equals.apply(x._1).apply(x._2));
     }
   }
@@ -488,7 +488,7 @@ public abstract class List<A> {
   }
 
   public static <A> List<A> flattenResult(List<Result<A>> list) {
-    return flatten(list.foldRight(list(), x -> y -> y.cons(x.map(List::list).getOrElse(list()))));
+    return flatten(list.foldRight(list(), x -> y -> y.cons(x.map(a -> list(a)).getOrElse(list()))));
   }
 
   public static <A, B> Result<List<B>> traverse(List<A> list, Function<A, Result<B>> f) {

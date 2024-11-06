@@ -1,5 +1,6 @@
 package com.fpinjava.optionaldata.exercise06_01;
-
+import com.fpinjava.lists.exercise05_21.List;
+import com.fpinjava.common.Function;
 
 public abstract class Option<A> {
 
@@ -20,7 +21,7 @@ public abstract class Option<A> {
 
     @Override
     public A getOrElse(A defaultValue) {
-      throw new IllegalStateException("Not implemented yet");
+      return defaultValue;
     }
 
     @Override
@@ -42,8 +43,9 @@ public abstract class Option<A> {
       return this.value;
     }
 
+    @Override
     public A getOrElse(A defaultValue) {
-      throw new IllegalStateException("Not implemented yet");
+        return value;
     }
 
     @Override
@@ -59,5 +61,27 @@ public abstract class Option<A> {
   @SuppressWarnings("unchecked")
   public static <A> Option<A> none() {
     return none;
+  }
+
+  public static <B extends Comparable<B>> Function<B, Function<List<B>, B>> max(){
+      return x0-> lst -> lst.isEmpty()? x0 : lst.tail().foldLeft(lst.head(), acc->y -> acc.compareTo(y)> 0 ? acc : y);
+  }
+
+  static <A extends Comparable<A>> A max(A x0, List<A> xs) {
+    return xs.isEmpty()
+            ? x0
+            : xs.tail().foldLeft(xs.head(), acc -> y -> acc.compareTo(y) < 0 ? y : acc);
+  }
+
+  static <A extends Comparable<A>> Option<A> max(List<A> xs) {
+    return xs.isEmpty()? Option.none() : Option.some(xs.foldLeft(xs.head(), acc ->y -> acc.compareTo(y) < 0 ? y :acc));
+  }
+  public static void main(String[] args){
+      List<Integer> lst = List.list(1, 2, 3, 4, 5);
+      System.out.println(lst);
+      //max().apply(lst.head()).apply(lst);
+      System.out.println(max(lst.head(),lst));
+      System.out.println(max(List.<Integer>list(7, 3, 2, 4, 1,5,6)).getOrElse(0));
+      System.out.println(max(List.<Integer>list()).getOrElse(0));
   }
 }

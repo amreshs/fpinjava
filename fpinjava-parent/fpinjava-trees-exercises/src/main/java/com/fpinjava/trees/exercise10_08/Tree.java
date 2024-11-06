@@ -239,7 +239,7 @@ public abstract class Tree<A extends Comparable<A>> {
   }
 
   public static <A extends Comparable<A>> Tree<A> tree(List<A> list) {
-    return list.foldLeft(empty(), t -> t::insert);
+    return list.foldLeft(empty(), t -> a -> t.insert(a));
   }
 
   @SafeVarargs

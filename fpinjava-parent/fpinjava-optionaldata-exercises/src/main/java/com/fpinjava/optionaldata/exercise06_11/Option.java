@@ -2,7 +2,7 @@ package com.fpinjava.optionaldata.exercise06_11;
 
 
 import com.fpinjava.common.Function;
-import com.fpinjava.common.List;
+import com.fpinjava.lists.exercise05_21.List;
 import com.fpinjava.common.Supplier;
 
 public abstract class Option<A> {
@@ -124,8 +124,28 @@ public abstract class Option<A> {
     return a.flatMap(ax -> b.flatMap(bx -> c.map(cx -> f.apply(ax).apply(bx).apply(cx))));
   }
 
-  public static <A> Option<List<A>> sequence(List<Option<A>> list) {
-    throw new IllegalStateException("Not implemented yet");
+  public static <A> Option<List<A>> sequence(List<Option<A>> lst) {
+    //return lst.foldLeft(Option.some(List.list()),lstN->itm->map2(lstN,itm,x->y->x.cons(y)));
+    return lst.isEmpty()? Option.some(List.list()): lst.head().flatMap(hd -> sequence(lst.tail()).map(lt -> lt.cons(hd)));
+  }
+
+  public static void main(String[] args) {
+    List<String> lst = List.list("11", "22", "33", "44", "35", "10");
+    List<Option<String>>lst2 = lst.map(str->Option.some(str));
+    List<Option<String>>lst3 = lst.map(str->Option.none());
+    Option<List<String>> optLst = sequence(lst2);
+    System.out.println(optLst);
+
+    Option<List<String>> optLst2 = optLst.map(x -> x.cons(null));
+    Option<List<String>> optLst3 = sequence(lst3);
+    System.out.println(optLst3);
+
+    Function<Integer, Function<String, Integer>> parseString = radix -> str-> Integer.parseInt(str, radix);
+    Function<String,Integer> parseInt16 = str -> Integer.parseInt(str, 16);
+    Function<String, Option<Integer>> parseInt16Option = Option.hlift(parseInt16);
+
+    Option<List<Integer>> optionList = sequence(lst.map(parseInt16Option));
+    System.out.println(optionList);
   }
 
 }

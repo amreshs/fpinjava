@@ -13,7 +13,7 @@ public class ToonMail {
         .put("Minnie", new Toon("Minnie", "Mouse"))
         .put("Donald", new Toon("Donald", "Duck", "donald@disney.com"));
 
-    Result<String> result = getName().flatMap(toons::get).flatMap(Toon::getEmail);
+    Result<String> result = getName().flatMap(t -> toons.get(t)).flatMap(toon -> toon.getEmail());
 
     System.out.println(result);
 

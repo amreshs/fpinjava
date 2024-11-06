@@ -88,7 +88,7 @@ public abstract class Tree<A extends Comparable<A>> {
   }
 
   private Function<List<A>, Function<List<A>, List<A>>> g = a -> b -> List.concat(a, b);
-  private Function<List<A>, Function<A, List<A>>> f = l -> l::cons;
+  private Function<List<A>, Function<A, List<A>>> f = l -> a -> l.cons(a);
 
   public List<A> toList() {
     return foldLeft(List.list(), f, g);

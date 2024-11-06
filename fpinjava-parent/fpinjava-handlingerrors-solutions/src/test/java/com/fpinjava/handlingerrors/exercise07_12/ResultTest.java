@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class ResultTest {
 
-  private Function<Result<String>, Result<Integer>> parseIntResult = Result.lift(Integer::parseInt);
+  private Function<Result<String>, Result<Integer>> parseIntResult = Result.lift(s -> Integer.parseInt(s));
 
   @Test
   public void testLift() {

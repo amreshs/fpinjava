@@ -3,8 +3,8 @@ package com.fpinjava.handlingerrors.exercise07_05;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
 import com.fpinjava.common.Function;
+import com.fpinjava.handlingerrors.exercise07_16.Result;
 
 public class ResultTest {
 

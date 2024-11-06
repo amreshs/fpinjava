@@ -23,7 +23,7 @@ public class ComposeAll {
   }
 
   public static <T> Function<T, T> composeAllViaFoldRight(List<Function<T, T>> lst) {
-    return x -> CollectionUtilities.foldRight(lst, x, a -> a::apply);
+    return x -> CollectionUtilities.foldRight(lst, x, a -> arg -> a.apply(arg));
   }
   
   static Function<Integer, Integer> add  = x -> x +1;

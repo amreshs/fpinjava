@@ -36,11 +36,11 @@ public class Computer {
 
   private static Function<String, IO<Boolean>> factorialComputer = line -> when(!line.equals("x"), () -> factorial(Integer.parseInt(line))
       .map(s -> String.format("factorial: %s", s))
-      .flatMap(Console::printLine));
+      .flatMap(s -> Console.printLine(s)));
 
   private static Function<String, IO<Boolean>> squareComputer = line -> when(!line.equals("x"), () -> unit(square(Integer.parseInt(line)))
       .map(s -> String.format("square: %s", s))
-      .flatMap(Console::printLine));
+      .flatMap(s -> Console.printLine(s)));
 
   public static IO<Nothing> compute(Function<String, IO<Boolean>> f, String name) {
     return sequence(

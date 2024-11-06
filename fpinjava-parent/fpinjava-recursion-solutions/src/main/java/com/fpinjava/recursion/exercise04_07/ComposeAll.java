@@ -22,6 +22,6 @@ public class ComposeAll {
   }
   
   public static <T> Function<T, T> composeAllViaFoldRight(List<Function<T, T>> list) {
-    return x -> FoldRight.foldRight(list, x, a -> a::apply);
+    return x -> FoldRight.foldRight(list, x, a -> arg -> a.apply(arg));
   }
 }

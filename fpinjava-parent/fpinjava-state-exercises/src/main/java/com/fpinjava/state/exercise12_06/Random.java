@@ -30,7 +30,7 @@ public interface Random<A> extends Function<RNG, Tuple<A, RNG>> {
     throw new IllegalStateException("To be implemented");
   }
 
-  Random<Integer> intRnd = RNG::nextInt;
+  Random<Integer> intRnd = rng -> rng.nextInt();
 
   Random<Boolean> booleanRnd = Random.map(intRnd, x -> x % 2 == 0);
 

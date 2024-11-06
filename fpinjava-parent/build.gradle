@@ -1,7 +1,9 @@
+
 version = '1.0'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+
 
 allprojects {
   apply plugin: 'java'
@@ -102,6 +104,7 @@ project(':fpinjava-optionaldata-exercises') {
 
   dependencies {
     implementation project(':fpinjava-common')
+    implementation project(':fpinjava-lists-exercises')
     testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
@@ -126,6 +129,7 @@ project(':fpinjava-handlingerrors-solutions') {
 
   dependencies {
     implementation project(':fpinjava-common')
+    implementation project(':fpinjava-handlingerrors-exercises')
     testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }
@@ -142,6 +146,7 @@ project(':fpinjava-advancedlisthandling-solutions') {
 
   dependencies {
     implementation project(':fpinjava-common')
+    implementation project(':fpinjava-advancedlisthandling-exercises')
     testImplementation group: 'junit', name: 'junit', version: '4.+'
   }
 }

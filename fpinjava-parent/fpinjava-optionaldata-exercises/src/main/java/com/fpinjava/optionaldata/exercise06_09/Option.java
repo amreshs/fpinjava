@@ -91,10 +91,32 @@ public abstract class Option<A> {
   }
 
   public static <A, B> Function<Option<A>, Option<B>> lift(Function<A, B> f) {
-    throw new IllegalStateException("Not implemented yet");
+    return x -> {
+      try {
+        return x.map(f);
+      } catch (Exception e) {
+        return Option.none();
+      }
+    };
   }
 
   public static <A, B> Function<A, Option<B>> hlift(Function<A, B> f) {
-    throw new IllegalStateException("Not implemented yet");
+    return x -> {
+      try{
+        return Option.some(x).map(f);
+      }
+      catch(Exception e) {
+        return Option.none();
+      }
+    };
+  }
+
+  public static void main(String[] args) {
+    Option<Integer> optionNumber = Option.some(100);
+    Function<Option<Integer>, Option<String>> optionIntToOptionString = lift(Integer::toBinaryString);
+    System.out.println(optionIntToOptionString.apply(optionNumber));
+
+    Function<Integer, Option<String>> intToOptionString = hlift(Integer::toBinaryString);
+    System.out.println(intToOptionString.apply(63));
   }
 }

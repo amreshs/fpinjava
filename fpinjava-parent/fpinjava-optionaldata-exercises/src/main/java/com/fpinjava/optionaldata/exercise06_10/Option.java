@@ -110,10 +110,31 @@ public abstract class Option<A> {
     };
   }
 
+  private static <A, B, C> Function<B, C> innerFunc(A ax, Function<A, Function<B,C>> f){
+
+    return bx -> f.apply(ax).apply(bx);
+  }
+  private static <A, B, C> Function<A,Option<C>> innerMap(Option<B> b, Function<A, Function<B,C>> f) {
+      //return  ax -> b.map(bx -> f.apply(ax).apply(bx));
+    return  ax -> b.map(innerFunc(ax, f));
+  }
   public static <A, B, C> Option<C> map2(Option<A> a,
                                          Option<B> b,
                                          Function<A, Function<B, C>> f) {
-    throw new IllegalStateException("Not implemented yet");
+    //return a.flatMap(ax -> b.map(bx -> f.apply(ax).apply(bx)));
+    return a.flatMap(innerMap(b, f));
   }
 
+  public static<A,B,C,D> Option<D> map3(Option<A> a,
+                                        Option<B> b,
+                                        Option<C> c,
+                                        Function<A, Function<B,Function<C, D>>> f) {
+      return  a.flatMap(ax -> b.flatMap(bx -> c.map(cx -> f.apply(ax).apply(bx).apply(cx))));
+  }
+
+  public static Function<Integer,Function<Integer, Function<Integer, Integer>>> fun = ax->bx->cx->ax*ax-bx/bx+cx;
+  public static void main(String[] args) {
+    Option<Integer> a = Option.some(10);
+    System.out.println(a.map3(Option.some(3), Option.some(3), Option.some(3),fun));
+  }
 }

@@ -16,7 +16,7 @@ public class MapTest {
     List<String> expected = list.reverse().map(NumbersToEnglish.convertUS);
     Map<Integer, String> map = list.foldLeft(Map.<Integer, String>empty(), m -> i -> m.add(i, NumbersToEnglish.convertUS.apply(i)));
     Result<List<String>> rl = List.sequence(map.foldLeft(List.<Result<String>>list(), lst -> me -> lst.cons(me.value), l1 -> l2 -> List.concat(l1, l2)));
-    assertTrue(rl.map(expected::equals).getOrElse(false));
+    assertTrue(rl.map(obj -> expected.equals(obj)).getOrElse(false));
   }
 
   @Test

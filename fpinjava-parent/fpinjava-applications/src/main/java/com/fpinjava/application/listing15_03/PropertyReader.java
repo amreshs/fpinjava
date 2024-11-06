@@ -49,15 +49,15 @@ public class PropertyReader {
   }
 
   public Result<List<Integer>> getAsIntegerList(String name) {
-    return getAsList(name, Integer::parseInt);
+    return getAsList(name, s -> Integer.parseInt(s));
   }
 
   public Result<List<Double>> getAsDoubleList(String name) {
-    return getAsList(name, Double::parseDouble);
+    return getAsList(name, s -> Double.parseDouble(s));
   }
 
   public Result<List<Boolean>> getAsBooleanList(String name) {
-    return getAsList(name, Boolean::parseBoolean);
+    return getAsList(name, s -> Boolean.parseBoolean(s));
   }
 
   public Result<List<String>> getAsStringList(String name) {
@@ -96,7 +96,7 @@ public class PropertyReader {
   }
 
   public Result<String> getAsPropertyString(String propertyName) {
-    return getAsString(propertyName).map(PropertyReader::toPropertyString);
+    return getAsString(propertyName).map(s -> toPropertyString(s));
   }
 
   private Result<String> getProperty(Properties properties, String name) {

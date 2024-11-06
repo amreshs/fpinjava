@@ -3,6 +3,7 @@ package com.fpinjava.optionaldata.exercise06_04;
 
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
+import com.fpinjava.lists.exercise05_21.List;
 
 public abstract class Option<A> {
 
@@ -16,7 +17,7 @@ public abstract class Option<A> {
   public abstract <B> Option<B> map(Function<A, B> f);
 
   public <B> Option<B> flatMap(Function<A, Option<B>> f) {
-    throw new IllegalStateException("Not implemented yet");
+    return map(f).getOrElse(Option::none);
   }
 
   private static class None<A> extends Option<A> {
@@ -78,5 +79,13 @@ public abstract class Option<A> {
   @SuppressWarnings("unchecked")
   public static <A> Option<A> none() {
     return none;
+  }
+
+  public static void main(String[] args) {
+    List<Integer> lst = List.<Integer>list(21, 34, 56, 43, 78);
+    List<Option<String>>lstOption = lst.map(x -> Option.some(x.toString()));
+    List<Option<String>> lstNill = List.<Option<String>>list(Option.none());
+    lstOption = List.concat(lstNill, lstOption);
+    System.out.println(lstOption.map(x -> x.flatMap(y -> Option.some(Integer.parseInt(y)*100))));
   }
 }

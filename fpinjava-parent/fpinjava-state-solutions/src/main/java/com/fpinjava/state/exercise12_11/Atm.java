@@ -12,17 +12,17 @@ public class Atm {
   public static StateMachine<Input, Outcome> createMachine() {
 
     Condition<Input, Outcome> predicate1 = t -> t.value.isDeposit();
-    Transition<Input, Outcome> transition1 = Outcome::add;
+    Transition<Input, Outcome> transition1 = t1 -> Outcome.add(t1);
 
     Condition<Input, Outcome> predicate2 = t -> t.value.isWithdraw() && t.value.getAmount().map(w -> w <= t.state.account).getOrElse(false);
-    Transition<Input, Outcome> transition2 = Outcome::sub;
+    Transition<Input, Outcome> transition2 = t1 -> Outcome.sub(t1);
 
     /*
      * Without the commented checking, this condition must come after the previous one in the list
      * With the commented checking, the order is not significant
      */
     Condition<Input, Outcome> predicate3 = t -> t.value.isWithdraw();// && t.value.getAmount().map(w -> w > t.state.account).getOrElse(false);
-    Transition<Input, Outcome> transition3 = Outcome::err;
+    Transition<Input, Outcome> transition3 = t1 -> Outcome.err(t1);
 
     Condition<Input, Outcome> predicate4 = t -> true;
     Transition<Input, Outcome> transition4 = t -> t.state;

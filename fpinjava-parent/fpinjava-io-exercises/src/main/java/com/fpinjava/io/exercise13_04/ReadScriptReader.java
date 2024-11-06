@@ -15,7 +15,7 @@ public class ReadScriptReader {
         "3", "Homer", "Simpson"
     );
 
-    Stream<Person> stream = Stream.unfold(input, ReadScriptReader::person);
+    Stream<Person> stream = Stream.unfold(input, input1 -> person(input1));
     stream.toList().forEach(System.out::println);
   }
 

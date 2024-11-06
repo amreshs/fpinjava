@@ -44,14 +44,14 @@ public interface IO<A> {
   }
 
   static <A> IO<Nothing> doWhile(IO<A> ioa, Function<A, IO<Boolean>> f) {
-    return ioa.flatMap(f::apply)
+    return ioa.flatMap(arg -> f.apply(arg))
               .flatMap(ok -> ok
                   ? doWhile(ioa, f)
                   : empty);
   }
 
   static <A> IO<Nothing> sequence(Stream<IO<A>> stream) {
-    return forEach(stream, IO::skip);
+    return forEach(stream, a -> skip(a));
   }
 
   static <A> IO<Nothing> skip(IO<A> a) {

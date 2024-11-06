@@ -15,10 +15,10 @@ public class OptionTest {
   @Test(expected = IllegalStateException.class)
   public void testGetOrElseNone() {
     Option<Integer> option = Option.none();
-//    assertEquals(Integer.valueOf(0), option.getOrElse(OptionTest::getDefault));
+    //assertEquals(Integer.valueOf(0), option.getOrElse(OptionTest::getDefault));
   }
 
-  public static int getDefault() {
+  public static Integer getDefault() {
     throw new IllegalStateException();
   }
 }

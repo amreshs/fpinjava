@@ -3,6 +3,7 @@ package com.fpinjava.optionaldata.exercise06_05;
 
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
+import com.fpinjava.lists.exercise05_21.List;
 
 public abstract class Option<A> {
 
@@ -20,7 +21,7 @@ public abstract class Option<A> {
   }
 
   public Option<A> orElse(Supplier<Option<A>> defaultValue) {
-    throw new IllegalStateException("Not implemented yet");
+    return map(x -> this).getOrElse(defaultValue);
   }
 
   private static class None<A> extends Option<A> {
@@ -83,4 +84,12 @@ public abstract class Option<A> {
   public static <A> Option<A> none() {
     return none;
   }
+
+  public static void main(String[] args) {
+    List<Integer> lst = List.<Integer>list(23, 45, 21, 11, 56, 32);
+    List<Option<String>>lstOption = lst.map(x -> Option.some(x.toString()));
+    System.out.println(lstOption.head().getOrElse(() -> ""));
+    System.out.println(lstOption.head().orElse(Option::none));
+  }
+
 }

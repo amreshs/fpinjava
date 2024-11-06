@@ -18,7 +18,7 @@ public class Countdown3 {
   }
 
   private static Result<List<Integer>> readNumbers(String s) {
-    return List.sequence(List.words(s).map(Countdown3::read));
+    return List.sequence(List.words(s).map(s1 -> read(s1)));
   }
 
   private static abstract class Op {
@@ -238,7 +238,7 @@ public class Countdown3 {
   }
 
   private static IO<Nothing> display(Result<List<Expr>> res) {
-    return getCpuTime().flatMap(t0 -> res.tryIO(exprs -> displayWithStartingTime(exprs, t0), Console::printLine));
+    return getCpuTime().flatMap(t0 -> res.tryIO(exprs -> displayWithStartingTime(exprs, t0), o -> Console.printLine(o)));
   }
 
   private static IO<Nothing> displayWithStartingTime(List<Expr> exprs, long t0) {
@@ -255,7 +255,7 @@ public class Countdown3 {
   }
 
   private static IO<Nothing> displayFirstSolutionIO(Result<Expr> rexpr, long t0, long t1) {
-    return Console.printLine(String.format("\nOne possible solution is %s, found in %s ms.", rexpr.map(Expr::toString).getOrElse("!!No expression!!"), t1 - t0));
+    return Console.printLine(String.format("\nOne possible solution is %s, found in %s ms.", rexpr.map(expr -> expr.toString()).getOrElse("!!No expression!!"), t1 - t0));
   }
 
   private static IO<Nothing> displayNoSolutionIO(long t0) {
@@ -282,12 +282,12 @@ public class Countdown3 {
     return Console.printLine("\nCOUNTDOWN NUMBERS GAME SOLVER") // print the first line of the presentation message
                   .flatMap(x -> Console.printLine("-----------------------------\n")) // print the second line
                   .flatMap(x -> Console.print("Enter the given numbers: ")) // print the first prompt
-                  .flatMap(Console::readLine) // read the list of numbers in string form
-                  .map(Countdown3::readNumbers) // convert it to a result of list of integers
+                  .flatMap(nothing -> Console.readLine(nothing)) // read the list of numbers in string form
+                  .map(s -> readNumbers(s)) // convert it to a result of list of integers
                   .flatMap(ns -> Console.print("Enter the target number: ") // print the second prompt
-                                        .flatMap(Console::readLine) // read a number in string form
-                                        .map(Countdown3::read) // convert it to result of integer
+                                        .flatMap(nothing1 -> Console.readLine(nothing1)) // read a number in string form
+                                        .map(s1 -> read(s1)) // convert it to result of integer
                                         .map(n -> ns.flatMap(ns_ -> n.map(n_ -> solutions_(ns_, n_))))) // compute the solution to a result of list of Expr
-                  .flatMap(Countdown3::display); // print the solution
+                  .flatMap(res -> display(res)); // print the solution
   }
 }

@@ -9,7 +9,7 @@ public class Random<A> extends State<RNG, A> {
     super(run);
   }
 
-  public static State<RNG, Integer> intRnd = new Random<>(RNG::nextInt);
+  public static State<RNG, Integer> intRnd = new Random<>(rng -> rng.nextInt());
 
   public static State<RNG, Boolean> booleanRnd = intRnd.map(x -> x % 2 == 0);
 
