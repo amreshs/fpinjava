@@ -367,10 +367,19 @@ public abstract class Result<T> implements Serializable {
   }
 
   public static <A, B, C> Function<Result<A>, Function<Result<B>, Result<C>>> lift2(Function<A, Function<B, C>> f) {
-    throw new RuntimeException("To be implemented");
+    return a->b->a.map(f).flatMap(b::map);
   }
 
-  public static <A, B, C, D> Function<Result<A>, Function<Result<B>, Function<Result<C>, Result<D>>>> lift3(Function<A, Function<B, Function<C, D>>> f) {
-    throw new RuntimeException("To be implemented");
+  public static <A, B, C, D> Function<Result<A>, Function<Result<B>, Function<Result<C>,Result<D>>>> lift3(Function<A, Function<B, Function<C, D>>> f) {
+    return a->b->c->a.map(f).flatMap(b::map).flatMap(c::map);
+  }
+
+  public static void main(String[] args) {
+    Function<Integer, Function<Integer, String>> fun1 = a->b->String.format("Multiply = %s", (a.intValue() * b.intValue()));
+    Function<Integer, Function<Integer, Function<Integer, String>>> fun2 = a->b->c-> String.format("Total Value = %s", (a.intValue() + b.intValue())* c.intValue());
+
+    System.out.println(lift2(fun1).apply(Result.success(24)).apply(Result.success(100)));
+    System.out.println(lift3(fun2).apply(Result.success(24)).apply(Result.success(100)).apply(Result.success(25)));
+
   }
 }

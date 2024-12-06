@@ -268,6 +268,12 @@ public abstract class List<A> {
   }
 
   public static <A> List<A> flattenResult(List<Result<A>> list) {
-    throw new IllegalStateException("To be implemented");
+    return flatten(foldRight(list, list(), x->y->y.cons(x.map(List::list).getOrElse(list()))));
+  }
+
+  public static void main(String[] args) {
+    List<Result<Integer>> lstResult = List.list(Result.success(10), Result.success(100), Result.empty(), Result.success(1000));
+    Result<List<Integer>> newLst = Result.success(flattenResult(lstResult));
+    System.out.println(newLst);
   }
 }

@@ -7,6 +7,7 @@ import com.fpinjava.common.TailCall;
 import com.fpinjava.common.Tuple;
 import com.fpinjava.common.Tuple3;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import static com.fpinjava.common.TailCall.ret;
@@ -184,11 +185,24 @@ public abstract class List<A> {
   }
 
   public <B> Map<B, List<A>> groupByImperative(Function<A, B> f) {
-    throw new IllegalStateException("To be implemented");
+    List<A> workList = this;
+    Map<B, List<A>> mp = Map.empty();
+    while (!workList.isEmpty()) {
+      final B k = f.apply(workList.head());
+      List<A> lst = mp.get(k).getOrElse(list()).cons(workList.head());
+      mp.put(k, lst);
+      workList = workList.tail();
+    }
+    return mp;
   }
 
   public <B> Map<B, List<A>> groupBy(Function<A, B> f) {
-    throw new IllegalStateException("To be implemented");
+    Map<B, List<A>> mp = new Map<>();
+    return foldRight(this,mp, a->m-> {
+      final B k = f.apply(a);
+      return m.put(k,m.get(k).getOrElse(list()).cons(a));
+    }
+    );
   }
 
   @SuppressWarnings("rawtypes")
@@ -496,5 +510,16 @@ public abstract class List<A> {
             : list.head().equals(sub.head())
                 ? sus(() -> startsWith_(list.tail(), sub.tail()))
                 : ret(Boolean.FALSE);
+  }
+
+  public static void main(String[] args) {
+    List lst = list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 2), new Tuple("!", 4));;
+    Function<Tuple<String, Integer>, Integer> f = x -> x._2;
+    Map<Integer, Tuple<String, Integer>> mp = lst.groupBy(f);
+    System.out.println(lst.groupByImperative(f));
+    /*
+    System.out.println(tpl._1);
+    System.out.println(tpl._2);
+    */
   }
 }

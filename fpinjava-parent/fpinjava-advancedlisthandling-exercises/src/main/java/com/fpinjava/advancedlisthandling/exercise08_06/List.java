@@ -271,7 +271,12 @@ public abstract class List<A> {
     return flatten(list.foldRight(list(), x -> y -> y.cons(x.map(a -> list(a)).getOrElse(list()))));
   }
 
-  public static <A> Result<List<A>> sequence(List<Result<A>> list) {
-    throw new IllegalStateException("To be implemented");
+  public static <A> Result<List<A>> sequence(List<Result<A>> lst) {
+    return lst.filter(a-> a.isSuccess() || a.isFailure()).foldRight(Result.success(List.list()), x->y->Result.map2(x, y, a->b-> b.cons(a)));
+  }
+
+  public static void main(String[] args) {
+    List<Result<String>> lst = List.list(Result.success("Hello"), Result.success("World"), Result.success("to Functional Programming!"));
+    System.out.println(sequence(lst));
   }
 }

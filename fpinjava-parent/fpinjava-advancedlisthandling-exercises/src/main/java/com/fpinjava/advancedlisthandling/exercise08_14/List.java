@@ -111,7 +111,14 @@ public abstract class List<A> {
   }
 
   public Tuple<List<A>, List<A>> splitAt(int index) {
-    throw new IllegalStateException("To be implemented");
+    Tuple<List<A>, List<A>> acc = new Tuple<>(list(), this);
+    index = index < 0 ? 0 : index >= length() ? length() - 1 : index;
+
+    return splitAt_(index,  acc).eval();
+  }
+
+  private TailCall<Tuple<List<A>, List<A>>> splitAt_(int index, Tuple<List<A>, List<A>> acc) {
+    return (index < 0 || acc._2.length() == 0) ? ret(new Tuple<>(acc._1.reverse(), acc._2)) : sus(() -> splitAt_(index-1,new Tuple<>(acc._1.cons(acc._2.head()),acc._2.tail())));
   }
 
   @SuppressWarnings("rawtypes")
@@ -393,5 +400,14 @@ public abstract class List<A> {
 
   public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
+  }
+
+  public static void main(String[] args) {
+    List lst = List.list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 3), new Tuple("!", 4));
+    Tuple tpl = lst.splitAt(1);
+    System.out.println(lst.splitAt(1));
+    System.out.println(tpl._1);
+    System.out.println(tpl._2);
+    //System.out.println(lst.getAt(3));
   }
 }

@@ -118,7 +118,7 @@ public abstract class List<A> {
 
     @Override
     public Result<A> headOption() {
-      throw new IllegalStateException("To be implemented");
+      return Result.empty();
     }
   }
 
@@ -244,7 +244,7 @@ public abstract class List<A> {
 
     @Override
     public Result<A> headOption() {
-      throw new IllegalStateException("To be implemented");
+      return Result.success(head());
     }
   }
 

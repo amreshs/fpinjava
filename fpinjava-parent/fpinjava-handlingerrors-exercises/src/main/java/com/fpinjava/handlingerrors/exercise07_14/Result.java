@@ -375,6 +375,12 @@ public abstract class Result<T> implements Serializable {
   }
 
   public static <A, B, C> Result<C> map2(Result<A> a, Result<B> b, Function<A, Function<B, C>> f) {
-    throw new RuntimeException("To be implemented");
+    return lift2(f).apply(a).apply(b);
+  }
+
+  public static void main(String[] args) {
+    Function<Integer, Function<Integer, String>> fun1 = a->b->String.format("Multiply = %s", (a.intValue() * b.intValue()));
+    System.out.println(map2(Result.success(100), Result.success(25), fun1));
   }
 }
+

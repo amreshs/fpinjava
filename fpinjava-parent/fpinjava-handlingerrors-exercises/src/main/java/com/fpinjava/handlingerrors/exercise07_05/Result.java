@@ -1,6 +1,5 @@
 package com.fpinjava.handlingerrors.exercise07_05;
 
-
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
 
@@ -27,11 +26,11 @@ public abstract class Result<T> implements Serializable {
   }
 
   public Result<T> filter(Function<T, Boolean> p) {
-    throw new RuntimeException("To be implemented");
+    return flatMap(x ->p.apply(x)? this : failure("Function returned false"));
   }
 
   public Result<T> filter(Function<T, Boolean> p, String message) {
-    throw new RuntimeException("To be implemented");
+    return flatMap(x -> p.apply(x)? this : Result.failure(message));
   }
 
   private static class Empty<T> extends Result<T> {
@@ -155,5 +154,11 @@ public abstract class Result<T> implements Serializable {
   @SuppressWarnings("unchecked")
   public static <T> Result<T> empty() {
     return empty;
+  }
+
+
+  public static void main(String[] args) {
+    System.out.println(Result.success(100).filter(x ->x==100));
+    System.out.println(Result.success(100).filter(x ->x>100, "Number is not greater than 100"));
   }
 }

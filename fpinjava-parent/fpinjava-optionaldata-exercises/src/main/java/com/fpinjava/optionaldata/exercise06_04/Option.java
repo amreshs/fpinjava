@@ -81,11 +81,15 @@ public abstract class Option<A> {
     return none;
   }
 
+  public static Option<Integer> convertToInteger(String a){
+    return Option.some(Integer.parseInt(a)*200);
+  }
   public static void main(String[] args) {
     List<Integer> lst = List.<Integer>list(21, 34, 56, 43, 78);
     List<Option<String>>lstOption = lst.map(x -> Option.some(x.toString()));
     List<Option<String>> lstNill = List.<Option<String>>list(Option.none());
     lstOption = List.concat(lstNill, lstOption);
     System.out.println(lstOption.map(x -> x.flatMap(y -> Option.some(Integer.parseInt(y)*100))));
+    System.out.println(lstOption.map(x -> x.flatMap(Option::convertToInteger)));
   }
 }

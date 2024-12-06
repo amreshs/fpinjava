@@ -3,6 +3,7 @@ package com.fpinjava.advancedlisthandling.exercise08_09;
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Result;
 import com.fpinjava.common.TailCall;
+import com.fpinjava.common.Tuple;
 
 import static com.fpinjava.common.TailCall.ret;
 import static com.fpinjava.common.TailCall.sus;
@@ -292,7 +293,14 @@ public abstract class List<A> {
   }
 
   public static <A, B, C> List<C> product(List<A> list1, List<B> list2, Function<A, Function<B, C>> f) {
-    throw new IllegalStateException("To be implemented");
+    //return list1.foldLeft(list(), x->y->list2.foldLeft(x, a->b->a.cons(f.apply(y).apply(b))));
+    return list1.flatMap(a->list2.map(b->(f.apply(a).apply(b))));
   }
 
+  public static void main(String[] args) {
+    List<String> lstStr = List.list("A", "B","C", "D");
+    List<Integer> lstInt = List.list(1, 2, 3, 4, 5);
+    System.out.println(product(lstStr, lstInt, x->y->x+y));
+
+  }
 }

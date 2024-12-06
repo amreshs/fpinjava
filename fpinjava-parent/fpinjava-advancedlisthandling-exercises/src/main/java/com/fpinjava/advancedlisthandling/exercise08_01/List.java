@@ -86,7 +86,7 @@ public abstract class List<A> {
 
     @Override
     public int lengthMemoized() {
-      throw new IllegalStateException("To be implemented");
+      return 0;
     }
 
     @Override
@@ -119,10 +119,13 @@ public abstract class List<A> {
 
     private final A head;
     private final List<A> tail;
+    private final int length;
+
 
     private Cons(A head, List<A> tail) {
       this.head = head;
       this.tail = tail;
+      this.length = tail.length()+1;
     }
 
     public A head() {
@@ -199,7 +202,7 @@ public abstract class List<A> {
 
     @Override
     public int lengthMemoized() {
-      throw new IllegalStateException("To be implemented");
+      return length;
     }
 
     @Override

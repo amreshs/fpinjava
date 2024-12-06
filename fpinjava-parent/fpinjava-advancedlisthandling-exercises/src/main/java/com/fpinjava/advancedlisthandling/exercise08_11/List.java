@@ -36,7 +36,8 @@ public abstract class List<A> {
   }
 
   public <A1, A2> Tuple<List<A1>, List<A2>> unzip(Function<A, Tuple<A1, A2>> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight(new Tuple<>(list(), list()), a -> tCont ->{ Tuple<A1, A2> tpl = f.apply(a);
+      return new Tuple<>(tCont._1.cons(tpl._1), tCont._2.cons(tpl._2));} );
   }
 
   @SuppressWarnings("rawtypes")
@@ -302,5 +303,10 @@ public abstract class List<A> {
 
   public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
+  }
+
+  public static void main(String[] args) {
+    List lst = List.list("Hello_1", "World_2", "of FP_3");
+    //System.out.println(lst.unzip( s-> { String[] str = s.split("_"); return new Tuple<>(str[0], Integer.parseInt(str[1]));}));
   }
 }

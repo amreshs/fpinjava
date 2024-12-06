@@ -296,8 +296,12 @@ public abstract class List<A> {
     return list1.flatMap(a -> list2.map(b -> f.apply(a).apply(b)));
   }
 
-  public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
-    throw new IllegalStateException("To be implemented");
+  public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> lst) {
+    return lst.foldRight(new Tuple<>(List.list(), List.list()), l -> l1-> new Tuple<> ( l1._1.cons(l._1), l1._2.cons(l._2) ));
   }
 
+  public static void main(String[] args) {
+    List lst = List.list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 3));
+    System.out.println(unzip(lst) );
+  }
 }

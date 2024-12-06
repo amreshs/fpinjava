@@ -463,11 +463,32 @@ public abstract class List<A> {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
   }
 
-  public static <A> boolean hasSubList(List<A> list, List<A> sub) {
-    throw new IllegalStateException("To be implemented");
+  public static <A> Boolean hasSubList(List<A> lst, List<A> sub) {
+    return hasSubList_(lst, sub).eval();
   }
 
-  public static <A> Boolean startsWith(List<A> list, List<A> sub) {
-    throw new IllegalStateException("To be implemented");
+  private static <A> TailCall<Boolean> hasSubList_(List<A> lst, List<A> sub) {
+    return lst.isEmpty()? ret(Boolean.FALSE) : startsWith(lst, sub)? ret(Boolean.TRUE) : hasSubList_(lst.tail(), sub);
   }
+
+  public static <A> Boolean startsWith(List<A> lst, List<A> sub) {
+    return startsWith_(lst, sub).eval();
+  }
+
+  private static <A> TailCall<Boolean> startsWith_(List<A> lst, List<A> sub) {
+    return sub.isEmpty()? ret(Boolean.TRUE): lst.isEmpty()? ret(Boolean.FALSE) :
+            lst.head().equals(sub.head())?
+            sus(() -> startsWith_(lst.tail(), sub.tail())):
+            ret(Boolean.FALSE);
+  }
+
+  public static void main(String[] args) {
+    List lst = list("Hello","World","of FP","!");
+    List sub = list("World","of FP");
+
+    System.out.println(hasSubList(lst, sub));
+    System.out.println(startsWith(lst, sub));
+    System.out.println(startsWith(lst.tail(), sub));
+  }
+
 }

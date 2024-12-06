@@ -4,6 +4,7 @@ package com.fpinjava.handlingerrors.exercise07_11;
 import com.fpinjava.common.Effect;
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
+import java.util.logging.Logger;
 
 import java.io.Serializable;
 
@@ -110,7 +111,7 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<RuntimeException> forEachOrException(Effect<T> ef) {
-      throw new RuntimeException("To be implemented");
+        return empty();
     }
 
     @Override
@@ -185,7 +186,7 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<RuntimeException> forEachOrException(Effect<T> ef) {
-      throw new RuntimeException("To be implemented");
+      return success(exception);
     }
   }
 
@@ -255,7 +256,8 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<RuntimeException> forEachOrException(Effect<T> ef) {
-      throw new RuntimeException("To be implemented");
+      ef.apply(value);
+      return empty();
     }
   }
 
@@ -316,5 +318,9 @@ public abstract class Result<T> implements Serializable {
               String.format(message, value));
       return Result.failure(new IllegalStateException(errMessage, e));
     }
+  }
+
+  public static void main(String[] args) {
+    Result.success(100).forEachOrThrow(System.out::println)/*.forEach(Logger::log)*/;
   }
 }

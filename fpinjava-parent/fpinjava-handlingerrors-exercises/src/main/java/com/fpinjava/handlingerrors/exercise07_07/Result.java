@@ -67,7 +67,7 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<T> mapFailure(String s) {
-      throw new RuntimeException("To be implemented");
+      return this;
     }
 
     @Override
@@ -117,7 +117,7 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<T> mapFailure(String s) {
-      throw new RuntimeException("To be implemented");
+      return Result.failure(new IllegalStateException(s , exception));
     }
   }
 
@@ -157,7 +157,7 @@ public abstract class Result<T> implements Serializable {
 
     @Override
     public Result<T> mapFailure(String s) {
-      throw new RuntimeException("To be implemented");
+      return this;
     }
   }
 
@@ -180,5 +180,9 @@ public abstract class Result<T> implements Serializable {
   @SuppressWarnings("unchecked")
   public static <T> Result<T> empty() {
     return empty;
+  }
+
+  public static void main(String[] args) {
+    System.out.println(Result.failure("failure").mapFailure("changedFailure"));
   }
 }

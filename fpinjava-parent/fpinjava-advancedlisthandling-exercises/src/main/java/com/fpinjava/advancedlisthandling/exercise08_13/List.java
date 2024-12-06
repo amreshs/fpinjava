@@ -58,10 +58,33 @@ public abstract class List<A> {
   }
 
   public Result<A> getAt(int index) {
+
+    class Tuple<T, U>{
+      public final T _1;
+      public final U _2;
+
+      public Tuple(T _1, U _2){
+        this._1 = _1;
+        this._2 = _2;
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        if(this.getClass() != o.getClass()) return false;
+        else {
+          @SuppressWarnings("rawtypes")
+          Tuple that = (Tuple)o;
+          return that._2 == this._2;
+        }
+      }
+
+    }
+
+    Tuple<Result<A>, Integer> zero = new Tuple<>(Result.failure("Index out of bound"), -1);
     Tuple<Result<A>, Integer> identity = new Tuple<>(Result.failure("Index out of bound"), index);
     Tuple<Result<A>, Integer> rt = index < 0 || index >= length()
         ? identity
-        : foldLeft(identity, ta -> a -> ta._2 < 0 ? ta : new Tuple<>(Result.success(a), ta._2 - 1));
+        : foldLeft(identity, zero, ta -> a -> ta._2 < 0 ? ta : new Tuple<>(Result.success(a), ta._2 - 1));
     return rt._1;
   }
 
@@ -131,7 +154,7 @@ public abstract class List<A> {
 
     @Override
     public <B> B foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return identity;
     }
 
     @Override
@@ -257,9 +280,13 @@ public abstract class List<A> {
 
     @Override
     public <B> B foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return foldLeft_(this, identity, zero, f).eval();
     }
 
+    private <B> TailCall<B> foldLeft_(List<A> lst, B identity, B zero, Function<B, Function<A, B>> f){
+      return lst.isEmpty() || identity.equals(zero) ? ret(identity) :
+              TailCall.sus(() -> foldLeft_(lst.tail(), f.apply(identity).apply(lst.head()), zero, f));
+    }
     @Override
     public <B> B foldRight(B identity, Function<A, Function<B, B>> f) {
       return reverse().foldLeft(identity, x -> y -> f.apply(y).apply(x));
@@ -342,5 +369,11 @@ public abstract class List<A> {
 
   public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
+  }
+
+  public static void main(String[] args) {
+    List lst = List.list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 3));
+    System.out.println(lst.getAt(1));
+    System.out.println(lst.getAt(3));
   }
 }

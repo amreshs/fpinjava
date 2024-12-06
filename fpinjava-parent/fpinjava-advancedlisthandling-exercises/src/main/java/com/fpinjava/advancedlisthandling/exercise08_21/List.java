@@ -207,7 +207,7 @@ public abstract class List<A> {
   }
 
   public boolean forAll(Function<A, Boolean> p) {
-    throw new IllegalStateException("To be implemented");
+    return foldLeft(true, false, a -> b -> a && p.apply(b))._1;
   }
 
   public boolean forAll_(Function<A, Boolean> p) {
@@ -576,4 +576,8 @@ public abstract class List<A> {
         : Result.empty());
   }
 
+  public static void main(String[] args) {
+    List<Integer> lst = List.list(1, 2, 30, 40);
+    System.out.println(lst.forAll_(i -> i > 10));
+  }
 }

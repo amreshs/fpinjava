@@ -3,6 +3,7 @@ package com.fpinjava.handlingerrors.exercise07_03;
 
 import com.fpinjava.common.Function;
 import com.fpinjava.common.Supplier;
+import com.fpinjava.lists.exercise05_21.List;
 
 public abstract class Either<E, A> {
 
@@ -13,7 +14,7 @@ public abstract class Either<E, A> {
   public abstract A getOrElse(Supplier<A> defaultValue);
 
   public Either<E, A> orElse(Supplier<Either<E, A>> defaultValue) {
-    throw new RuntimeException("To be implemented");
+    return map(x->this).getOrElse(defaultValue);
   }
 
   private static class Left<E, A> extends Either<E, A> {
@@ -34,7 +35,8 @@ public abstract class Either<E, A> {
 
     @Override
     public A getOrElse(Supplier<A> defaultValue) {
-      throw new RuntimeException("To be implemented");
+
+      return defaultValue.get();
     }
 
     @Override
@@ -61,7 +63,7 @@ public abstract class Either<E, A> {
 
     @Override
     public A getOrElse(Supplier<A> defaultValue) {
-      throw new RuntimeException("To be implemented");
+      return value;
     }
 
     @Override
@@ -76,5 +78,33 @@ public abstract class Either<E, A> {
 
   public static <E, A> Either<E, A> right(A value) {
     return new Right<>(value);
+  }
+
+  public static <A extends Comparable<A>> Either<String, A> max(List<A> xs){
+    return xs.isEmpty()? Either.left("Empty List"): Either.right(xs.tail().foldLeft(xs.head(), x-> y-> x.compareTo(y)<0?y:x));
+  }
+
+  public static Function<Integer, Either<String,String>> intToEWord= i ->{
+    switch(i){
+      case 0: return right("zero");
+      case 1: return right("one");
+      case 2: return right("two");
+      case 3: return right("three");
+      case 4: return right("four");
+      case 5: return right("five");
+      case 6: return right("six");
+      case 7: return right("seven");
+      case 8: return right("eight");
+      case 9: return right("nine");
+      default: return left("unknown");
+    }
+
+  };
+
+  public static void main(String[] args) {
+    List<Integer> lst = List.list(1, 2, 3, 4, 5);
+    System.out.println(lst);
+    System.out.println(max(lst).flatMap(intToEWord).orElse(() -> left("Big Number")));
+    System.out.println(max(lst).flatMap(intToEWord).getOrElse(() -> "Big Number"));
   }
 }

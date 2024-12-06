@@ -28,7 +28,7 @@ public abstract class List<A> {
   public abstract Result<A> headOption();
 
   public Result<A> lastOption() {
-    throw new IllegalStateException("To be implemented");
+    return isEmpty()? Result.empty(): foldLeft(Result.empty(),x -> y -> Result.success(y));
   }
 
   public List<A> cons(A a) {

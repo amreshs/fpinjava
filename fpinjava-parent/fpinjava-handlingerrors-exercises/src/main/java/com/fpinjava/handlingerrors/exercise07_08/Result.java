@@ -234,18 +234,37 @@ public abstract class Result<T> implements Serializable {
   }
 
   public static <T> Result<T> of(T value) {
-    throw new RuntimeException("To be implemented");
+    return value != null ? Result.success(value) : Result.failure("Value is null");
   }
 
   public static <T> Result<T> of(T value, String message) {
-    throw new RuntimeException("To be implemented");
+    return value != null ? Result.success(value) : Result.failure(message);
   }
 
   public static <T> Result<T> of(Function<T, Boolean> predicate, T value) {
-    throw new RuntimeException("To be implemented");
+    try{
+      return predicate.apply(value)? Result.success(value) : Result.empty();
+    }
+    catch (Exception e) {
+      String errorMessage = String.format("Predicate threw an exception while evaluating prediccate for value %s", value);
+      return Result.failure(new IllegalStateException(errorMessage, e));
+    }
   }
 
   public static <T> Result<T> of(Function<T, Boolean> predicate, T value, String message) {
-    throw new RuntimeException("To be implemented");
+   try{
+     return predicate.apply(value)? Result.success(value): Result.empty();
+   }catch(Exception e){
+     String errorMessage = String.format("Predicate threw an exception while evaluating value %s", String.format(message, value));
+     return Result.failure(new IllegalStateException(errorMessage, e));
+   }
+  }
+
+  public static void main(String[] args) {
+    System.out.println(Result.of(true));
+    System.out.println(Result.of(null));
+    System.out.println(Result.of(x -> x == 100, 100));
+    System.out.println(Result.of(x -> x > 100, 100, "Value mismatch"));
+    System.out.println(Result.of(x -> 100/x > 10, 0));
   }
 }

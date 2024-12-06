@@ -125,7 +125,35 @@ public abstract class List<A> {
   }
 
   public Tuple<List<A>, List<A>> splitAt__(int index) {
-    throw new IllegalStateException("To be implemented");
+
+    class Tuple3<T,U, V> {
+      private final T _1;
+      private final U _2;
+      private final V _3;
+
+      public Tuple3(T t, U u, V v) {
+        this._1 = t;
+        this._2 = u;
+        this._3 = v;
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        if(this.getClass() != o.getClass()){
+          return false;
+        }
+        else{
+          Tuple3 that = (Tuple3) o;
+          return _3.equals(that._3);
+        }
+      }
+    }
+    Integer indx = index < 0 ? 0 : index >=this.length() ? this.length()-1: index;
+    Tuple3<List<A>, List<A>,Integer> identity = new Tuple3<>(list(), this, indx);
+    Tuple3<List<A>, List<A>,Integer> zero = new Tuple3<>(list(), list(), -1);
+
+    Tuple<Tuple3<List<A>, List<A>,Integer>, List<A>> rt = foldLeft(identity, zero, ta->a-> ta._3 < 0? ta : new Tuple3<>(ta._1.cons(a), ta._2.tail(), ta._3-1));
+    return new Tuple<>(rt._1._1.reverse(), rt._2);
   }
 
   @SuppressWarnings("rawtypes")
@@ -190,7 +218,7 @@ public abstract class List<A> {
 
     @Override
     public <B> Tuple<B, List<A>> foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return new Tuple<>(identity, list());
     }
 
     @Override
@@ -316,9 +344,12 @@ public abstract class List<A> {
 
     @Override
     public <B> Tuple<B, List<A>> foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return foldLeft_(this, identity, zero, f).eval();
     }
 
+    private <B> TailCall<Tuple<B, List<A>>> foldLeft_(List<A> lst, B acc, B zero, Function<B, Function<A, B>> f) {
+      return lst.isEmpty() || acc.equals(zero) ? ret(new Tuple<>(acc, lst)) : sus(() -> foldLeft_(lst.tail(), f.apply(acc).apply(lst.head()), zero, f));
+    }
     @Override
     public <B> B foldRight(B identity, Function<A, Function<B, B>> f) {
       return reverse().foldLeft(identity, x -> y -> f.apply(y).apply(x));
@@ -401,5 +432,14 @@ public abstract class List<A> {
 
   public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
+  }
+
+  public static void main(String[] args) {
+    List lst = list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 3), new Tuple("!", 4));
+    Tuple tpl = lst.splitAt__(1);
+    System.out.println(lst.splitAt(1));
+    System.out.println(tpl._1);
+    System.out.println(tpl._2);
+    //System.out.println(lst.getAt(3));
   }
 }

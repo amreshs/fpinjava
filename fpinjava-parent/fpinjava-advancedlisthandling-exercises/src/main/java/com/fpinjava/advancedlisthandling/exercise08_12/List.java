@@ -46,7 +46,11 @@ public abstract class List<A> {
   }
 
   public Result<A> getAt(int index) {
-    throw new IllegalStateException("To be implemented");
+    Tuple<Result<A>, Integer> identity = new Tuple<>(Result.failure("Out of index"), index);
+    Tuple<Result<A>, Integer> result =  (index <0 || index >= length())? identity:
+                    foldLeft(identity, iden -> val -> iden._2 < 0? iden :
+                            new Tuple<>(Result.success(val), iden._2-1));
+    return result._1;
   }
 
   @SuppressWarnings("rawtypes")
@@ -328,5 +332,10 @@ public abstract class List<A> {
 
   public static <A1, A2> Tuple<List<A1>, List<A2>> unzip(List<Tuple<A1, A2>> list) {
     return list.foldRight(new Tuple<>(list(), list()), t -> tl -> new Tuple<>(tl._1.cons(t._1), tl._2.cons(t._2)));
+  }
+
+  public static void main(String[] args) {
+    List lst = List.list(new Tuple<>("Hello", 1), new Tuple("World", 2), new Tuple("of FP", 3));
+    System.out.println(lst.getAt(1) );
   }
 }

@@ -513,10 +513,25 @@ public abstract class List<A> {
    * Caution: not stack safe
    */
   public static <A, S> List<A> unfold_(S z, Function<S, Result<Tuple<A, S>>> f) {
+    //return f.apply(z).map(x -> unfold_(x._2, f).cons(x._1)).getOrElse(list());
     return f.apply(z).map(x -> unfold_(x._2, f).cons(x._1)).getOrElse(list());
   }
 
   public static <A, S> List<A> unfold(S z, Function<S, Result<Tuple<A, S>>> f) {
-    throw new IllegalStateException("To be implemented");
+    return unfold__(list(), z, f).eval().reverse();
+  }
+
+  public static <A, S> TailCall<List<A>> unfold__(List<A> acc, S z, Function<S, Result<Tuple<A, S>>> f) {
+    Result<Tuple<A, S>> ut = f.apply(z);
+    Result<TailCall<List<A>>> result = ut.map(u -> sus(() -> unfold__(acc.cons(u._1), u._2, f)));
+    return result.getOrElse(ret(acc));
+  }
+
+  public static void main(String[] args) {
+   Function<String, Result<Tuple<Integer, String>>> fun = str -> str != ""?
+            Result.success(new Tuple<>(str.length(), str.substring(1))) :
+            Result.empty();
+
+   System.out.println(unfold("Hello", fun));
   }
 }

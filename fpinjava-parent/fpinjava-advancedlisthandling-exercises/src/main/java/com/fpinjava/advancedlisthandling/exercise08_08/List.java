@@ -279,7 +279,19 @@ public abstract class List<A> {
     return traverse(list, x -> x);
   }
 
-  public static <A, B, C> List<C> zipWith(List<A> list1, List<B> list2, Function<A, Function<B, C>> f) {
-    throw new IllegalStateException("To be implemented");
+  public static <A, B, C> List<C> zipWith(List<A> lst1, List<B> lst2, Function<A, Function<B, C>> f) {
+    return zipWith_(lst1, lst2, list(), f).eval().reverse();
+  }
+
+  private static <A, B, C> TailCall<List<C>> zipWith_(List<A> lst1, List<B> lst2, List<C> acc, Function<A, Function<B, C>> f) {
+    return lst1.isEmpty()|| lst2.isEmpty() ? ret(acc):
+            sus(() -> zipWith_(lst1.tail(), lst2.tail(), acc.cons(f.apply(lst1.head()).apply(lst2.head())), f));
+  }
+
+  public static void main(String[] args) {
+    List<Integer> lstInt = List.list(1, 2, 3, 4);
+    List<Double>  lstDbl = List.list(1.0, 2.0, 3.0, 4.0, 5.0);
+    System.out.println(zipWith(lstInt, lstDbl, a->b-> ((new Double(Double.sum(a, b))).toString())));
+
   }
 }

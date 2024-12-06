@@ -363,6 +363,16 @@ public abstract class Result<T> implements Serializable {
   }
 
   public static <A, B> Function<Result<A>, Result<B>> lift(final Function<A, B> f) {
-    throw new RuntimeException("To be implemented");
+    return x -> {
+      try {
+        return x.map(f);
+      } catch (Exception e) {
+        return Result.failure(e);
+      }
+    };
+  }
+
+  public static void main(String[] args) {
+    System.out.println(lift(x->String.format("Value = %s", x)).apply(Result.success(1000)));
   }
 }
