@@ -38,7 +38,7 @@ abstract class Stream<A> {
 
     @Override
     public Result<A> headOption() {
-      throw new IllegalStateException("To be implemented");
+      return Result.empty();
     }
   }
 
@@ -77,7 +77,7 @@ abstract class Stream<A> {
 
     @Override
     public Result<A> headOption() {
-      throw new IllegalStateException("To be implemented");
+      return Result.success(head());
     }
   }
 
@@ -96,5 +96,10 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    Stream<Integer> strm = Stream.from(10);
+    System.out.println(strm.tail().tail().tail().headOption());
   }
 }

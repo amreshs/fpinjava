@@ -21,6 +21,7 @@ public abstract class Tree<A extends Comparable<A>> {
   public abstract Result<A> max();
   public abstract Result<A> min();
   public abstract Tree<A> remove(A a);
+  public abstract Tree<A> removeMerge(Tree<A> ta);
   public abstract boolean isEmpty();
 
   private static class Empty<A extends Comparable<A>> extends Tree<A> {
@@ -72,7 +73,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Tree<A> remove(A a) {
-      throw new IllegalStateException("To be implemented");
+      return empty();
+    }
+
+    @Override
+    public Tree<A> removeMerge(Tree<A> ta){
+      return ta;
     }
 
     @Override
@@ -155,9 +161,30 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Tree<A> remove(A a) {
-      throw new IllegalStateException("To be implemented");
+      if(a.compareTo(this.value) < 0) {
+        return new T<>(left.remove(a), value(), right);
+      }
+      else if(a.compareTo(this.value) > 0){
+        return new T<>(left, value, right.remove(a));
+      }
+      else{
+        return left.removeMerge(right);
+      }
     }
 
+    public Tree<A> removeMerge(Tree<A> ta){
+      if(ta.isEmpty()) return this;
+
+      if(ta.value().compareTo(this.value) < 0){
+        return new T<>(left.removeMerge(ta), value,right);
+      }
+      else if(ta.value().compareTo(this.value) > 0){
+        return new T<>(left, value,right.removeMerge(ta));
+      }
+      else{
+        throw new IllegalStateException("We should not be here!");
+      }
+    }
     @Override
     public boolean isEmpty() {
       return false;
@@ -181,5 +208,33 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static void main(String[] args) {
+    T<Integer> tree = new Tree.T<>(
+            new T<>(
+                    new T<>(
+                            empty(), 2, empty()
+                    ),
+                    5 ,
+                    new T<>(
+                            empty(), 7, empty()
+                    )
+            ),
+            10,
+            new T<>(
+                    new T<>(
+                            empty(), 13, empty()
+                    ),
+                    15,
+                    new T<>(
+                            empty(), 18, new T<>(empty(), 20, empty())
+                    )
+            )
+    );
+
+    System.out.println(tree);
+
+    System.out.println(tree.remove(7));
   }
 }

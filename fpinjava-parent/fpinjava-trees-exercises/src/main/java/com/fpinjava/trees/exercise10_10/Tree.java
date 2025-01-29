@@ -44,6 +44,8 @@ public abstract class Tree<A extends Comparable<A>> {
 
   public abstract <B> B foldPostOrder(B identity, Function<B, Function<B, Function<A, B>>> f);
 
+  protected abstract List<A> toListPreOrderLeft();
+
   private static class Empty<A extends Comparable<A>> extends Tree<A> {
 
     @Override
@@ -146,6 +148,11 @@ public abstract class Tree<A extends Comparable<A>> {
     @Override
     public String toString() {
       return "E";
+    }
+
+    @Override
+    protected List<A> toListPreOrderLeft(){
+      return List.list();
     }
   }
 
@@ -295,6 +302,10 @@ public abstract class Tree<A extends Comparable<A>> {
     }
 
     @Override
+    protected List<A> toListPreOrderLeft(){
+      return left.toListPreOrderLeft().concat(right.toListPreOrderLeft()).cons(value);
+    }
+    @Override
     public String toString() {
       return String.format("(T %s %s %s)", left, value, right);
     }
@@ -314,7 +325,46 @@ public abstract class Tree<A extends Comparable<A>> {
     return tree(List.list(as));
   }
 
+  public static <A extends Comparable<A>> boolean lt(A first, A second){
+    return first.compareTo(second) < 0;
+  }
+
+  public static <A extends Comparable<A>> boolean lt(A first, A second, A third){
+    return lt(first, second) && lt(second, third);
+  }
+  public static <A extends Comparable<A>> boolean ordered(Tree<A> left, A a, Tree<A> right){
+    return left.max().flatMap(lMax -> right.min().map(rMin -> lt(lMax,a,rMin))).getOrElse(left.isEmpty() && right.isEmpty())
+            ||
+            left.max().mapEmpty().flatMap(ignore -> right.min().map(rMin -> lt(a, rMin))).getOrElse(false)
+            ||
+            right.max().mapEmpty().flatMap(ignore -> left.max().map(lMax -> lt(lMax, a))).getOrElse(false);
+  }
+
   public static <A extends Comparable<A>> Tree<A> tree(Tree<A> t1, A a, Tree<A> t2) {
-    throw new IllegalStateException("To be implemented");
+    return ordered(t1, a, t2)
+            ?new T<A>(t1, a, t2)
+            :ordered(t2, a, t1)
+                    ?new T<A>(t2, a, t1)
+                    :Tree.<A> empty().insert(a).merge(t1).merge(t2);
+  }
+
+  public  <B> B foldLeft(B identity, Function<B, Function<A,B>> fun){
+    return toListPreOrderLeft().foldLeft(identity, fun);
+  }
+
+  public static void main(String[] args) {
+    Tree<Integer> trFrst = Tree.tree(4,2,6,1,3,5,7);
+    System.out.println(trFrst);
+
+    Tree<Integer> trScnd = Tree.tree(14,12,16,11,13,15,17);
+    System.out.println(trScnd);
+
+    Tree<Integer> trThird = tree(trFrst, 9, trScnd);
+    System.out.println(trThird);
+
+    System.out.println(trThird.foldPostOrder(Tree.<Integer>empty(),t1->t2->value -> Tree.tree(t1, value, t2)));
+
+    System.out.println(trFrst.toListPreOrderLeft());
+    System.out.println(trFrst.foldLeft(List.list(), lst->a->lst.cons(a)));
   }
 }

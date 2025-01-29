@@ -35,7 +35,7 @@ abstract class Stream<A> {
   }
 
   public Stream<A> takeWhile(Function<A, Boolean> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight(Stream::empty, a->s->f.apply(a)? cons(()->a, s): empty() );
   }
 
   public boolean exists(Function<A, Boolean> p) {
@@ -201,5 +201,10 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    Stream<Integer> strm = from(1);
+    System.out.println(strm.takeWhile(a-> a <1000000).toList());
   }
 }

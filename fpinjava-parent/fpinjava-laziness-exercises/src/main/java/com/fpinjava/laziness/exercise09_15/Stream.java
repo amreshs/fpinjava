@@ -228,6 +228,11 @@ abstract class Stream<A> {
   }
 
   public static <A> Stream<A> repeat(A a) {
-    throw new IllegalStateException("To be implemented");
+
+    return cons(() -> a, () -> repeat(a));
+  }
+
+  public static void main(String[] args) {
+    System.out.println(repeat("a").take(100).toList());
   }
 }

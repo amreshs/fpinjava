@@ -35,6 +35,8 @@ public abstract class Tree<A extends Comparable<A>> {
 
   public abstract <B> B foldLeft(B identity, Function<B, Function<A, B>> f, Function<B, Function<B, B>> g);
 
+  public abstract <B> B foldRight(B identity, Function<A, Function<B, B>> f, Function<B, Function<B, B>> g);
+
   private static class Empty<A extends Comparable<A>> extends Tree<A> {
 
     @Override
@@ -104,7 +106,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B> B foldLeft(B identity, Function<B, Function<A, B>> f, Function<B, Function<B, B>> g) {
-      throw new IllegalStateException("To be implemented");
+      return identity;
+    }
+
+    @Override
+    public <B> B foldRight(B identity, Function<A, Function<B, B>> f, Function<B, Function<B, B>> g) {
+      return identity;
     }
 
     @Override
@@ -224,7 +231,18 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B> B foldLeft(B identity, Function<B, Function<A, B>> f, Function<B, Function<B, B>> g) {
-      throw new IllegalStateException("To be implemented");
+      //Fold from right
+      // return g.apply(right.foldLeft(identity, f, g))
+      //        .apply(f.apply(left.foldLeft(identity, f,g)).apply(this.value()));
+
+      //Fold from left
+      return g.apply(left.foldLeft(identity, f, g))
+              .apply(f.apply(right.foldLeft(identity, f,g)).apply(this.value()));
+    }
+
+    @Override
+    public <B> B foldRight(B identity, Function<A, Function<B, B>> f, Function<B, Function<B, B>> g) {
+      return g.apply(f.apply(this.value()).apply(left.foldRight(identity, f,g))).apply(right.foldRight(identity, f,g));
     }
 
     @Override
@@ -245,5 +263,13 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static void main(String[] args) {
+    List<Integer> lstFnl = Tree.tree(4,2,6,1,3,5,7).foldLeft(List.list(), lst->a->lst.cons(a), a->b->b.concat(a));
+    System.out.println(lstFnl);
+
+    List<Integer> lstFnl2 = Tree.tree(4,2,6,1,3,5,7).foldRight(List.list(), a->lst->lst.cons(a), a->b->b.concat(a));
+    System.out.println(lstFnl2);
   }
 }

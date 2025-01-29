@@ -31,7 +31,7 @@ abstract class Stream<A> {
   public abstract <B> B foldRight(Supplier<B> z, Function<A, Function<Supplier<B>, B>> f);
 
   public <B> Stream<B> map(Function<A, B> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight(Stream::empty, a -> acc -> cons(()->f.apply(a), acc));
   }
 
   public Result<A> headOptionViaFoldRight() {
@@ -207,5 +207,11 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    Stream strm = from(1).take(10);
+    Function<Integer, String> f = a -> a.toBinaryString(2);
+    System.out.println(strm.map(f).toList());
   }
 }

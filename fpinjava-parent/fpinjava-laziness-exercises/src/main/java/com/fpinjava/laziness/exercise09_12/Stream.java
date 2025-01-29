@@ -31,7 +31,8 @@ abstract class Stream<A> {
   public abstract <B> B foldRight(Supplier<B> z, Function<A, Function<Supplier<B>, B>> f);
 
   public Stream<A> append(Supplier<Stream<A>> s) {
-    throw new IllegalStateException("To be implemented");
+
+    return foldRight(s, a->b->cons(()->a, b));
   }
 
   public Stream<A> filter(Function<A, Boolean> p) {
@@ -217,5 +218,11 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    Stream<Integer> strm = from(1).take(100);
+    Stream<Integer> strm2 = from(101).take(100);
+    System.out.println(strm.append(()->strm2).toList());
   }
 }

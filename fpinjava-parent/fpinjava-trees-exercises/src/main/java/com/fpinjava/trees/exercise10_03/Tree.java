@@ -102,8 +102,25 @@ public abstract class Tree<A extends Comparable<A>> {
     return EMPTY;
   }
 
+  public static <A extends Comparable<A>> Tree<A> tree(List<A> lst) {
+    return lst.foldLeft(empty(), t-> t::insert);
+  }
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
-    throw new IllegalStateException("To be implemented");
+    List<A> lst = List.list(as);
+    return tree(lst);
+  }
+
+  public static <A extends Comparable<A>> void inOrder(Tree<A> tree) {
+    if(tree == EMPTY) return;
+
+    inOrder(tree.left());
+    //System.out.println(System.identityHashCode(tree)+ " " + tree.value() );
+    System.out.println(tree.value());
+    inOrder(tree.right());
+  }
+  public static void main(String[] args) {
+    Tree<Integer> tr = Tree.tree(10, 5, 15, 2, 7, 13, 18);
+    inOrder(tr);
   }
 }

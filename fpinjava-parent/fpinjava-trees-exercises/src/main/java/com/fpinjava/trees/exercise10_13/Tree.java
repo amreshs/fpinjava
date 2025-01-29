@@ -123,7 +123,7 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public List<A> toListInOrderRight() {
-      throw new IllegalStateException("To be implemented");
+      return List.list();
     }
 
     @Override
@@ -285,7 +285,16 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public List<A> toListInOrderRight() {
-      throw new IllegalStateException("To be implemented");
+      //return left.toListInOrderRight().concat(List.list(value)).concat(right.toListInOrderRight());
+      return unBalanced(List.list(), this).eval();
+    }
+
+    private TailCall<List<A>> unBalanced(List<A> acc, Tree<A> tree){
+      return tree.isEmpty()
+              ?TailCall.ret(acc)
+              :tree.left().isEmpty()
+              ?TailCall.sus(() -> unBalanced(acc.cons(tree.value()), tree.right()))
+              :TailCall.sus(() -> unBalanced(acc, tree.rotateRight()));
     }
 
     protected Tree<A> removeMerge(Tree<A> ta) {
@@ -386,5 +395,13 @@ public abstract class Tree<A extends Comparable<A>> {
     return left.max().flatMap(lMax -> right.min().map(rMin -> lt(lMax, a, rMin))).getOrElse(left.isEmpty() && right.isEmpty())
         || left.min().mapEmpty().flatMap(ignore -> right.min().map(rMin -> lt(a, rMin))).getOrElse(false)
         || right.min().mapEmpty().flatMap(ignore -> left.max().map(lMax -> lt(lMax, a))).getOrElse(false);
+  }
+
+  public static void main(String[] args) {
+    Tree<Integer> trFrst = Tree.tree(4,2,6,1,3,5,7);
+    System.out.println(trFrst);
+
+    System.out.println(trFrst.toListInOrderRight());
+    //System.out.println(trFrst.rotateLeft());
   }
 }

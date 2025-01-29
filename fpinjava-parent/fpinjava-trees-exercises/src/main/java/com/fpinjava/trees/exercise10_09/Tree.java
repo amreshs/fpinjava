@@ -122,17 +122,17 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B> B foldInOrder(B identity, Function<B, Function<A, Function<B, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return identity;
     }
 
     @Override
     public <B> B foldPreOrder(B identity, Function<A, Function<B, Function<B, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return identity;
     }
 
     @Override
     public <B> B foldPostOrder(B identity, Function<B, Function<B, Function<A, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return identity;
     }
 
     @Override
@@ -264,17 +264,17 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B> B foldInOrder(B identity, Function<B, Function<A, Function<B, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return f.apply(left.foldInOrder(identity, f)).apply(value).apply(right.foldInOrder(identity, f));
     }
 
     @Override
     public <B> B foldPreOrder(B identity, Function<A, Function<B, Function<B, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return f.apply(value).apply(left.foldPreOrder(identity,f)).apply(right.foldPreOrder(identity,f));
     }
 
     @Override
     public <B> B foldPostOrder(B identity, Function<B, Function<B, Function<A, B>>> f) {
-      throw new IllegalStateException("To be implemented");
+      return f.apply(left.foldPostOrder(identity,f)).apply(right.foldPostOrder(identity, f)).apply(value);
     }
 
     @Override
@@ -295,5 +295,18 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static Function<List<Integer>, Function<Integer, Function<List<Integer>, List<Integer>>>> fun =
+          lst -> num-> lst1 -> lst1.concat(lst.cons(num));
+  public static void main(String[] args) {
+    List<Integer> lstFnl = Tree.tree(4,2,6,1,3,5,7).foldInOrder(List.list(), fun);
+    System.out.println(lstFnl);
+
+    List<Integer> lstFnl1 = Tree.tree(4,2,6,1,3,5,7).foldPreOrder(List.list(), a -> lst->lst1 -> lst1.concat(lst.cons(a)));
+    System.out.println(lstFnl1);
+
+    List<Integer> lstFnl2 = Tree.tree(4,2,6,1,3,5,7).foldPostOrder(List.list(), lst->lst1 ->a ->  lst1.concat(lst.cons(a)));
+    System.out.println(lstFnl2);
   }
 }

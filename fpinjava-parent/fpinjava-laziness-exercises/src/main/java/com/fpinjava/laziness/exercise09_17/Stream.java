@@ -245,7 +245,11 @@ abstract class Stream<A> {
   }
 
   public static Stream<Integer> fibs() {
-    throw new IllegalStateException("To be implemented");
+    return iterate(new Tuple<>(0, 1), x -> new Tuple<>(x._2, x._1+x._2)).map(a -> a._1);
+
   }
 
+  public static void main(String[] args) {
+    System.out.println(fibs().take(100).toList());
+  }
 }

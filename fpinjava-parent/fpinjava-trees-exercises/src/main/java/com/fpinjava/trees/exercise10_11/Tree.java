@@ -147,7 +147,7 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B extends Comparable<B>> Tree<B> map(Function<A, B> f) {
-      throw new IllegalStateException("To be implemented");
+      return Tree.<B>empty();
     }
 
     @Override
@@ -303,7 +303,7 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B extends Comparable<B>> Tree<B> map(Function<A, B> f) {
-      throw new IllegalStateException("To be implemented");
+      return foldInOrder(Tree.<B>empty(), t1->i->t2->Tree.tree(t1, f.apply(i), t2));
     }
 
     @Override
@@ -346,5 +346,27 @@ public abstract class Tree<A extends Comparable<A>> {
     return left.max().flatMap(lMax -> right.min().map(rMin -> lt(lMax, a, rMin))).getOrElse(left.isEmpty() && right.isEmpty())
         || left.min().mapEmpty().flatMap(ignore -> right.min().map(rMin -> lt(a, rMin))).getOrElse(false)
         || right.min().mapEmpty().flatMap(ignore -> left.max().map(lMax -> lt(lMax, a))).getOrElse(false);
+  }
+
+  public static  int log2nlz(int n){
+    return n == 0
+            ?0
+            :31 - Integer.numberOfLeadingZeros(n);
+
+  }
+
+  public static void main(String[] args) {
+    Tree<Integer> trFrst = Tree.tree(4, 2, 6, 1, 3, 5, 7);
+    Tree<Double> trFrstDbl = trFrst.map(a -> Double.valueOf(a * a));
+    System.out.println(trFrstDbl);
+
+    System.out.println(log2nlz(1073741824));
+
+    int strNum = 1073741824;
+    for (int i = 0; i < 31; i++) {
+      System.out.println("Number = " +strNum +" leading zeros = " +Integer.numberOfLeadingZeros(strNum) +" log2nlz= " +log2nlz(strNum));
+      strNum /= 2;
+
+    }
   }
 }

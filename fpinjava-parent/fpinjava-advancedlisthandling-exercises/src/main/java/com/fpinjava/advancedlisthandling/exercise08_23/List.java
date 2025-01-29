@@ -273,6 +273,7 @@ public abstract class List<A> {
         final List<List<A>> divList = divide(chunk);
 
         try {
+            //System.out.println("paraFoldLeft = " +divList.map(x -> es.submit(() -> x.foldLeft(identity, f))));
             List<B> result = divList.map(x -> es.submit(() -> x.foldLeft(identity, f))).map(x ->
             {
                 try {

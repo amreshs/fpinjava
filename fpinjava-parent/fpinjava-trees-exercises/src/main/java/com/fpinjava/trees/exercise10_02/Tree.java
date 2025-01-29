@@ -38,7 +38,7 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public boolean member(A a) {
-      throw new IllegalStateException("To be implemented");
+      return false;
     }
 
     @Override
@@ -85,7 +85,9 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public boolean member(A value) {
-      throw new IllegalStateException("To be implemented");
+      return (value.compareTo(this.value())< 0)? left().member(value) : //empty will return false
+              (value.compareTo(this.value())>0)? right().member(value): //empty will return false
+                      true; //value matched
     }
 
     @Override
@@ -97,5 +99,40 @@ public abstract class Tree<A extends Comparable<A>> {
   @SuppressWarnings("unchecked")
   public static <A extends Comparable<A>> Tree<A> empty() {
     return EMPTY;
+  }
+
+  public static <A extends Comparable<A>> void inOrder(Tree<A> tree) {
+    if(tree == EMPTY) return;
+
+    inOrder(tree.left());
+    System.out.println(System.identityHashCode(tree)+ " " + tree.value() );
+    System.out.println(tree.value());
+    inOrder(tree.right());
+  }
+
+  public static void main(String[] args) {
+   T<Integer> tree = new T<>(
+            new T<>(
+                    new T<>(
+                            empty(), 2, empty()
+                    ),
+                    5 ,
+                    new T<>(
+                            empty(), 7, empty()
+                    )
+            ),
+            10,
+            new T<>(
+                    new T<>(
+                            empty(), 13, empty()
+                    ),
+                    15,
+                    new T<>(
+                            empty(), 18, empty()
+                    )
+            )
+    );
+
+   System.out.println(tree.member(7));
   }
 }

@@ -230,7 +230,8 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Tree<A> insert(A a) {
-      throw new IllegalStateException("To be implemented");
+      Tree<A> t = ins(a);
+      return t.height() > log2nlz(size())*20 ? balance(t):t;
     }
 
     @Override
@@ -472,5 +473,19 @@ public abstract class Tree<A extends Comparable<A>> {
     return x.isSuccess()
         ? TailCall.sus(() -> unfold(new Tuple<>(a._2, x), f))
         : TailCall.ret(a);
+  }
+
+  public static void main(String[] args) {
+
+    List lst = List.list();
+    for(int i=1000; i>0; i--){
+      lst = lst.cons(i);
+    }
+    Tree<Integer> tree = Tree.tree(lst);
+    System.out.println(tree);
+
+    tree.insert(51);
+    System.out.println(tree);
+    System.out.println(tree.height());
   }
 }

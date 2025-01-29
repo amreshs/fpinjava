@@ -399,12 +399,54 @@ public abstract class Tree<A extends Comparable<A>> {
   }
 
   public static <A extends Comparable<A>> Tree<A> balance(Tree<A> tree) {
-    throw new IllegalStateException("To be implemented");
+    return balance_(tree.toListInOrderRight().foldLeft(Tree.<A>empty(), t->a->new T<>(empty(), a, t)));
+  }
+
+  private static<A extends Comparable<A>> Tree<A> balance_(Tree<A> tree) {
+    return !tree.isEmpty() && tree.height() > log2nlz(tree.size())
+            ? Math.abs(tree.left().height() - tree.right().height()) > 1
+            ? balance_(balanceFirstLevel(tree))
+            : new T<>(balance_(tree.left()), tree.value(), balance_(tree.right()))
+            : tree;
+  }
+
+  public static<A extends Comparable<A>> boolean isUnBalanced(Tree<A> tree) {
+    return Math.abs(tree.left().height() - tree.right().height()) > (tree.size()-1)%2;
+  }
+
+  public static<A> A unfold(A a, Function<A, Result<A>> f) {
+    Result<A> ra = Result.success(a);
+    return unfold_(new Tuple<>(ra,ra), f).eval()._2.getOrElse(a);
+  }
+
+  private static<A> TailCall<Tuple<Result<A>,Result<A>>> unfold_(Tuple<Result<A>,Result<A>> ra, Function<A, Result<A>> f){
+    Result<A> x = ra._1.flatMap(f);
+    return x.isSuccess()
+            ?TailCall.sus(() -> unfold_(new Tuple<>(ra._2, x), f))
+            :TailCall.ret(ra);
+
+  }
+
+  private static<A extends Comparable<A>> Tree<A> balanceFirstLevel(Tree<A> tree) {
+    return unfold(tree, t-> isUnBalanced(t)
+            ?tree.right().height() > tree.left().height()
+              ?Result.success(t.rotateLeft())
+              :Result.success(t.rotateRight())
+            :Result.empty()
+          );
   }
 
   public static int log2nlz(int n) {
     return n == 0
         ? 0
         : 31 - Integer.numberOfLeadingZeros(n);
+  }
+
+  public static void main(String[] args) {
+    Tree<Integer> trFrst = Tree.tree(2, 1,7, 4 ,6,3,5,7);
+    System.out.println(trFrst);
+
+    System.out.println(balance(trFrst));
+    //System.out.println(trFrst.rotateLeft());
   }
 }

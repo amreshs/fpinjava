@@ -50,7 +50,8 @@ public abstract class Result<T> implements Serializable {
     Function<IO<Result<A>>, Function<IO<A>, IO<Result<A>>>> f = iors -> ios -> iors.flatMap(rs -> ios.flatMap(s -> unit(Result.of(s))));
     return r.foldLeft(z,f);
   }
-  public static <T, U> Result<T> failure(Failure<U> failure) {
+  public static <T, U> Result<T>
+  failure(Failure<U> failure) {
     return new Failure<>(failure.exception);
   }
 

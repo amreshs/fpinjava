@@ -59,12 +59,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Result<A> max() {
-      throw new IllegalStateException("To be implemented");
+      return Result.empty();
     }
 
     @Override
     public Result<A> min() {
-      throw new IllegalStateException("To be implemented");
+      return Result.empty();
     }
 
     @Override
@@ -132,12 +132,13 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Result<A> max() {
-      throw new IllegalStateException("To be implemented");
+
+      return right.max().orElse(() -> Result.success(this.value));
     }
 
     @Override
     public Result<A> min() {
-      throw new IllegalStateException("To be implemented");
+      return left.min().orElse(() -> Result.success(this.value));
     }
 
     @Override
@@ -158,5 +159,33 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static void main(String[] args) {
+
+      T<Integer> tree = new T<>(
+              new T<>(
+                      new T<>(
+                              empty(), 2, empty()
+                      ),
+                      5 ,
+                      new T<>(
+                              empty(), 7, empty()
+                      )
+              ),
+              10,
+              new T<>(
+                      new T<>(
+                              empty(), 13, empty()
+                      ),
+                      15,
+                      new T<>(
+                              empty(), 18, new T<>(empty(), 20, empty())
+                      )
+              )
+      );
+
+      System.out.println("Tree Min = " + tree.min());
+      System.out.println("Tree Max = " + tree.max());
   }
 }

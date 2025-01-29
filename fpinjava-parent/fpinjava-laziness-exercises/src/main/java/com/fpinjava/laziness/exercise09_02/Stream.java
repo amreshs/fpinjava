@@ -22,7 +22,11 @@ abstract class Stream<A> {
   public abstract Result<A> headOption();
 
   public List<A> toList() {
-    throw new IllegalStateException("To be implemented");
+    return toList_(this, List.list()).eval().reverse();
+  }
+
+  private TailCall<List<A>> toList_(Stream<A> strm, List<A> acc) {
+    return strm.isEmpty() ? ret(acc) : sus(() -> toList_(strm.tail(), List.cons(head(), acc)));
   }
 
   private Stream() {}
@@ -104,5 +108,17 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+
+    Stream<Integer> strm = Stream.cons(() -> 10,()->Stream.empty());
+    Stream<Integer> strm1 = cons(()->strm.head(), strm);
+    Stream<Integer> strm2 = cons(()->strm1.head(), strm1);
+
+    List<Integer> lst = strm2.toList();
+    System.out.println(lst);
+
+
   }
 }

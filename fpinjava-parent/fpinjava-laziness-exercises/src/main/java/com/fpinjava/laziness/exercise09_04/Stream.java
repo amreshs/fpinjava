@@ -74,7 +74,7 @@ abstract class Stream<A> {
 
     @Override
     public Stream<A> takeWhile(Function<A, Boolean> f) {
-      throw new IllegalStateException("To be implemented");
+      return this;
     }
   }
 
@@ -130,7 +130,7 @@ abstract class Stream<A> {
 
     @Override
     public Stream<A> takeWhile(Function<A, Boolean> f) {
-      throw new IllegalStateException("To be implemented");
+      return f.apply(head.get())? cons(head, () -> tail().takeWhile(f)): empty();
     }
 
     public TailCall<Stream<A>> drop(Stream<A> acc, int n) {
@@ -155,5 +155,10 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    List<Integer> lst = from(1).takeWhile(a -> a <= 15).toList();
+    System.out.println(lst);
   }
 }

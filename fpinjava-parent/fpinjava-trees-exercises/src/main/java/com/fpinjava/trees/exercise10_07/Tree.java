@@ -91,7 +91,7 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Tree<A> merge(Tree<A> a) {
-      throw new IllegalStateException("To be implemented");
+      return a;
     }
 
     @Override
@@ -190,7 +190,16 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public Tree<A> merge(Tree<A> a) {
-      throw new IllegalStateException("To be implemented");
+      if(a.isEmpty()) return this;
+
+      if(a.value().compareTo(this.value) > 0) {
+        return new T<>(left, value, right.merge(new T<>(empty(), a.value(), a.right()))).merge(a.left());
+      }
+      else if(a.value().compareTo(this.value) < 0) {
+        return new T<>(left.merge( new T<> (a.left(), a.value(), empty())), value, right).merge(a.right());
+      }
+      else
+        return new T<>(left.merge(a.left()), value, right.merge(a.right()));
     }
 
     protected Tree<A> removeMerge(Tree<A> ta) {
@@ -223,5 +232,62 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static <A extends Comparable<A>> void inOrder(Tree<A> tree) {
+    if(tree == EMPTY) return;
+
+    inOrder(tree.left());
+    //System.out.println(System.identityHashCode(tree)+ " " + tree.value() );
+    System.out.println(tree.value());
+    inOrder(tree.right());
+  }
+
+  public static void main(String[] args) {
+    T<Integer> tree = new T<>(
+            new T<>(
+                    new T<>(
+                            empty(), 0, empty()
+                    ),
+                    1 ,
+                    new T<>(
+                            empty(), 2, empty()
+                    )
+            ),
+            3,
+            new T<>(
+                    new T<>(
+                            empty(), 4, empty()
+                    ),
+                    5,
+                    new T<>(
+                            empty(), 6, empty()
+                    )
+            )
+    );
+
+    T<Integer> tree2 = new T<>(
+            new T<>(
+                    new T<>(
+                            empty(), 1, empty()
+                    ),
+                    3 ,
+                    new T<>(
+                            empty(), 4, empty()
+                    )
+            ),
+            5,
+            new T<>(
+                    new T<>(
+                            empty(), 6, empty()
+                    ),
+                    7,
+                    new T<>(
+                            empty(), 8, empty()
+                    )
+            )
+    );
+
+    inOrder(tree.merge(tree2));
   }
 }

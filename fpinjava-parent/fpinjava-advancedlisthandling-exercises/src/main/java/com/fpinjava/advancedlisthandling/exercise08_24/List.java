@@ -256,6 +256,7 @@ public abstract class List<A> {
     final int chunks = 1024;
     final List<List<A>> dList = divide(chunks);
     try {
+      System.out.println(dList.map(x -> es.submit(() -> x.foldLeft(identity, f))));
       List<B> result = dList.map(x -> es.submit(() -> x.foldLeft(identity, f))).map(x -> {
         try {
           return x.get();

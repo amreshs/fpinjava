@@ -156,12 +156,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     protected Tree<A> rotateLeft() {
-      throw new IllegalStateException("To be implemented");
+      return this;
     }
 
     @Override
     protected Tree<A> rotateRight() {
-      throw new IllegalStateException("To be implemented");
+      return this;
     }
 
     @Override
@@ -322,12 +322,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     protected Tree<A> rotateLeft() {
-      throw new IllegalStateException("To be implemented");
+      return new T<>( new T<>(left, value, right.left()), right.value(), right.right() );
     }
 
     @Override
     protected Tree<A> rotateRight() {
-      throw new IllegalStateException("To be implemented");
+      return new T<>(left.left(), left.value(),new T<>(left.right() ,value, right));
     }
 
     @Override
@@ -370,5 +370,22 @@ public abstract class Tree<A extends Comparable<A>> {
     return left.max().flatMap(lMax -> right.min().map(rMin -> lt(lMax, a, rMin))).getOrElse(left.isEmpty() && right.isEmpty())
         || left.min().mapEmpty().flatMap(ignore -> right.min().map(rMin -> lt(a, rMin))).getOrElse(false)
         || right.min().mapEmpty().flatMap(ignore -> left.max().map(lMax -> lt(lMax, a))).getOrElse(false);
+  }
+
+  public static <A extends Comparable<A>> void inOrder(Tree<A> tree) {
+    if(tree == EMPTY) return;
+
+    inOrder(tree.left());
+    //System.out.println(System.identityHashCode(tree)+ " " + tree.value() );
+    System.out.println(tree.value());
+    inOrder(tree.right());
+  }
+
+  public static void main(String[] args) {
+    Tree<Integer> trFrst = Tree.tree(4,2,6,1,3,5,7);
+    System.out.println(trFrst);
+
+    System.out.println(trFrst.rotateRight());
+    System.out.println(trFrst.rotateLeft());
   }
 }

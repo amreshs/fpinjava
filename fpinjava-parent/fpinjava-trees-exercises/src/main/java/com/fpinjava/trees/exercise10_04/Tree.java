@@ -2,6 +2,7 @@ package com.fpinjava.trees.exercise10_04;
 
 
 import com.fpinjava.common.List;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 
 public abstract class Tree<A extends Comparable<A>> {
 
@@ -46,12 +47,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public int size() {
-      throw new IllegalStateException("To be implemented");
+      return 0;
     }
 
     @Override
     public int height() {
-      throw new IllegalStateException("To be implemented");
+      return -1;
     }
 
     @Override
@@ -105,12 +106,12 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public int size() {
-      throw new IllegalStateException("To be implemented");
+      return 1 + left.size() + right.size();
     }
 
     @Override
     public int height() {
-      throw new IllegalStateException("To be implemented");
+      return 1 + Math.max(left.height() , right.height());
     }
 
     @Override
@@ -131,5 +132,41 @@ public abstract class Tree<A extends Comparable<A>> {
   @SafeVarargs
   public static <A extends Comparable<A>> Tree<A> tree(A... as) {
     return tree(List.list(as));
+  }
+
+  public static <A extends Comparable<A>> void inOrder(Tree<A> tree) {
+    if(tree == EMPTY) return;
+
+    inOrder(tree.left());
+    System.out.println(System.identityHashCode(tree)+ " " + tree.value() );
+    System.out.println(tree.value());
+    inOrder(tree.right());
+  }
+
+  public static void main(String[] args) {
+    T<Integer> tree = new Tree.T<>(
+            new T<>(
+                    new T<>(
+                            empty(), 2, empty()
+                    ),
+                    5 ,
+                    new T<>(
+                            empty(), 7, empty()
+                    )
+            ),
+            10,
+            new T<>(
+                    new T<>(
+                            empty(), 13, empty()
+                    ),
+                    15,
+                    new T<>(
+                            empty(), 18, new T<>(empty(), 20, empty())
+                    )
+            )
+    );
+
+    System.out.println("Tree Size = " + tree.size());
+    System.out.println("Tree Height = " + tree.height());
   }
 }

@@ -105,7 +105,7 @@ abstract class Stream<A> {
 
     @Override
     public <B> B foldRight(Supplier<B> z, Function<A, Function<Supplier<B>, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return z.get();
     }
   }
 
@@ -168,7 +168,7 @@ abstract class Stream<A> {
 
     @Override
     public <B> B foldRight(Supplier<B> z, Function<A, Function<Supplier<B>, B>> f) {
-      throw new IllegalStateException("To be implemented");
+      return f.apply(head()).apply(() -> tail().foldRight(z,f));
     }
 
     public TailCall<Stream<A>> drop(Stream<A> acc, int n) {
@@ -186,6 +186,10 @@ abstract class Stream<A> {
     return new Cons<>(hd, () -> tl);
   }
 
+  static <A, B> B foldRight(Stream<A> s, Supplier<B> z, Function<A, Function<Supplier<B>, B>> f) {
+    return s.foldRight(z,f);
+  }
+
   @SuppressWarnings("unchecked")
   public static <A> Stream<A> empty() {
     return EMPTY;
@@ -193,5 +197,19 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  /*public <A,B> funOut(A a, Stream<A> st, Function<A, Boolean> f){
+    return f.apply(a)? cons(()->a,st) : empty();
+  }*/
+  public static void main(String[] args) {
+    Stream<Integer> s = from(1);
+    Function<Integer, Boolean> f = a -> a <= 100;
+    Function<Integer, Function<Supplier<Stream<Integer>>, Stream<Integer>>> fun = a -> st -> f.apply(a)? cons(()->a,st) : empty();
+
+
+
+    //System.out.println(foldRight(s, empty(), a -> b-> funOut(a, b, f).toList());
+
   }
 }

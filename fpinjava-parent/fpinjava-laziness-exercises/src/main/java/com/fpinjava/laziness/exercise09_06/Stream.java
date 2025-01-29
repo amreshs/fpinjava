@@ -29,9 +29,14 @@ abstract class Stream<A> {
   public abstract Stream<A> takeWhile(Function<A, Boolean> f);
 
   public boolean exists(Function<A, Boolean> p) {
-    throw new IllegalStateException("To be implemented");
+   return exists_(this, p).eval();
   }
 
+  private TailCall<Boolean> exists_(Stream<A> strm, Function<A, Boolean> p){
+    return strm.isEmpty()? ret(Boolean.FALSE):
+            p.apply(strm.head())? ret(Boolean.TRUE):
+                    sus(() -> exists_(strm.tail(), p));
+  }
   public Stream<A> dropWhile(Function<A, Boolean> f) {
     return dropWhile(this, f).eval();
   }
@@ -173,5 +178,12 @@ abstract class Stream<A> {
 
   public static Stream<Integer> from(int i) {
     return cons(() -> i, () -> from(i + 1));
+  }
+
+  public static void main(String[] args) {
+    Stream<Integer> strm = from(1).takeWhile(a -> a < 50);
+    System.out.println(strm.toList());
+    System.out.println(strm.exists(a -> a >= 50));
+    System.out.println(strm.exists(a -> a == 49));
   }
 }

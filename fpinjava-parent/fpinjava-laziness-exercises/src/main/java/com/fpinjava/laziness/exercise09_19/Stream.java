@@ -32,8 +32,10 @@ abstract class Stream<A> {
   public abstract <B> B foldRight(Supplier<B> z, Function<A, Function<Supplier<B>, B>> f);
 
   public Stream<A> filter(Function<A, Boolean> p) {
-    throw new IllegalStateException("To be implemented");
-  }
+    Stream<A> strm = this.dropWhile(x -> !p.apply(x));
+    //return strm.isEmpty() ? strm : cons(() -> strm.head()._1, ()-> strm.tail().filter(p));
+    return  strm.headOption()._1.map(a -> cons(() -> a, () -> strm.tail().filter(p))).getOrElse(empty());
+}
 
   public Stream<A> takeViaUnfold(int n) {
     return unfold(new Tuple<>(this, n), x -> x._1.isEmpty()
@@ -347,5 +349,9 @@ abstract class Stream<A> {
 
   public static Stream<Integer> fibs() {
     return unfold(new Tuple<>(1, 1), x -> Result.success(new Tuple<>(x._1, new Tuple<>(x._2, x._1 + x._2))));
+  }
+
+  public static void main(String[] args) {
+    System.out.println(from(1).take(500).filter(x -> x % 19 == 0 && x <= 500).toList());
   }
 }

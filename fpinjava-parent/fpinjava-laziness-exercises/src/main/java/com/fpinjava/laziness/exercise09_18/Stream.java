@@ -249,14 +249,21 @@ abstract class Stream<A> {
   }
 
   public static <A, S> Stream<A> unfold(S z, Function<S, Result<Tuple<A, S>>> f) {
-    throw new IllegalStateException("To be implemented");
+      return f.apply(z).map(x -> cons(() -> x._1,() -> unfold(x._2, f))).getOrElse(empty());
   }
 
   public static Stream<Integer> from(int n) {
-    throw new IllegalStateException("To be implemented");
+
+    return unfold(n, x -> Result.success(new Tuple<>(x, x+1)));
   }
 
   public static Stream<Integer> fibs() {
-    throw new IllegalStateException("To be implemented");
+
+    return unfold(new Tuple<>(0, 1), x -> Result.success(new Tuple<>(x._1, new Tuple<>(x._2, x._1+x._2))));
+  }
+
+  public static void main(String[] args) {
+    System.out.println(from(1).take(10).toList());
+    System.out.println(fibs().take(20).toList());
   }
 }
