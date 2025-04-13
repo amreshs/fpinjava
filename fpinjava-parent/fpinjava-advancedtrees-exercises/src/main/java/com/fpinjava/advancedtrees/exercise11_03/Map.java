@@ -49,10 +49,21 @@ public class Map<K extends Comparable<K>, V> {
   }
 
   public List<V> values() {
-    throw new IllegalStateException("To be implemented");
+    return List.sequence(delegate.foldInReverseOrder(List.<Result<V>>list(), lst1->vl->lst2-> List.concat(lst2, lst1.cons(vl.value)))).getOrElse(List.list());
   }
 
   public static <K extends Comparable<K>, V> Map<K, V> empty() {
     return new Map<>();
   }
+
+  public static void main(String[] args) {
+    Map<String, Integer> mapFromTree = empty();
+    mapFromTree = mapFromTree.add("A", 1);
+    mapFromTree = mapFromTree.add("B", 2);
+    mapFromTree = mapFromTree.add("C", 3);
+    mapFromTree = mapFromTree.add("Z", 26);
+
+    System.out.println(mapFromTree.values());
+  }
+
 }

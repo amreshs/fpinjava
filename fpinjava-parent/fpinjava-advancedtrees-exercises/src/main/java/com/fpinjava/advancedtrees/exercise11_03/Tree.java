@@ -56,6 +56,7 @@ public abstract class Tree<A extends Comparable<A>> {
   public abstract <B> B foldInOrder(B identity, Function<B, Function<A, Function<B, B>>> f);
   public abstract <B> B foldPreOrder(B identity, Function<A, Function<B, Function<B, B>>> f);
   public abstract <B> B foldPostOrder(B identity, Function<B, Function<B, Function<A, B>>> f);
+  public abstract <B> B foldInReverseOrder(B identity, Function<B, Function<A, Function<B, B>>> f);
 
   abstract Tree<A> right();
   abstract Tree<A> left();
@@ -162,6 +163,11 @@ public abstract class Tree<A extends Comparable<A>> {
 
     @Override
     public <B> B foldPostOrder(B identity, Function<B, Function<B, Function<A, B>>> f) {
+      return identity;
+    }
+
+    @Override
+    public <B> B foldInReverseOrder(B identity, Function<B, Function<A, Function<B, B>>> f){
       return identity;
     }
 
@@ -515,6 +521,10 @@ public abstract class Tree<A extends Comparable<A>> {
       return f.apply(left.foldPostOrder(identity, f)).apply(right.foldPostOrder(identity, f)).apply(value);
     }
 
+    @Override
+    public <B> B foldInReverseOrder(B identity, Function<B, Function<A, Function<B, B>>> f){
+      return f.apply(right.foldInReverseOrder(identity,f)).apply(value).apply(left.foldInReverseOrder(identity,f));
+    }
     @Override
     public Tree<A> right() {
       return right;

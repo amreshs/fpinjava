@@ -1,6 +1,8 @@
 package com.fpinjava.advancedtrees.exercise11_01;
 
 
+import com.fpinjava.common.List;
+
 /*
  * see http://www.cs.cmu.edu/~rwh/theses/okasaki.pdf
  */
@@ -23,13 +25,14 @@ public abstract class Tree<A extends Comparable<A>> {
   protected abstract A value();
   public abstract int size();
   public abstract int height();
+  protected abstract Tree<A> ins(A value);
 
   protected static <A extends Comparable<A>> Tree<A> blacken(Tree<A> t) {
-    throw new IllegalStateException("To be implemented");
+    return t.isEmpty()? empty() : new T<>(B, t.left(), t.value(), t.right());
   }
 
   public Tree<A> insert(A value) {
-    throw new IllegalStateException("To be implemented");
+    return blacken(ins(value));
   }
 
   private static class E<A extends Comparable<A>> extends Tree<A> {
@@ -85,6 +88,11 @@ public abstract class Tree<A extends Comparable<A>> {
     }
 
     @Override
+    protected Tree<A> ins(A value) {
+      return new T<>(R, empty(), value, empty());
+    }
+
+    @Override
     public String toString() {
       return "E";
     }
@@ -107,8 +115,36 @@ public abstract class Tree<A extends Comparable<A>> {
       this.height = Math.max(left.height(), right.height()) + 1;
     }
 
+    protected Tree<A> ins(A value) {
+      if(this.value().compareTo(value) > 0) {
+        return balance(this.color,  this.left().ins(value), value, this.right());
+      }
+      else if(this.value().compareTo(value) < 0) {
+        return balance(this.color,  this.left(), value, this.right().ins(value));
+      }
+      else{
+        return new T<>(this.color,  this.left(), value, this.right());
+      }
+    }
+
     private Tree<A> balance(Color color, Tree<A> left, A value, Tree<A> right) {
-      throw new IllegalStateException("To be implemented");
+      if(color.isB() && left.isTR() && left.left().isTR()){
+        return new T<>(R, new T<>(B, left.left().left(), left.left().value(), left.left().right()), left.value(), new T<>(B, left.right(), value, right));
+      }
+
+      if(color.isB() && left.isTR() && right.left().isTR()){
+        return new T<>(R, new T<>(B,left.left(), left.value(), left.right().left()), left.right().value(), new T<>(B,left.right().right(), value, right));
+      }
+
+      if(color.isB() && right.isTR() && right.left().isTR()){
+        return new T<>(R, new T<>(B,left, value, right().left().left()), right.left().value(), new T<>(B, right.left().right(), right.value(), right.right()));
+      }
+
+      if(color.isB() && right.isTR() && right.right().isTR()){
+        return new T<>(R, new T<>(B, left, value, right.left()), right.value(), new T<>(B, right.right().left(), right.right().value(), right.right().right()));
+      }
+
+      return new T<>(color, left, value, right);
     }
 
     @Override
@@ -211,5 +247,28 @@ public abstract class Tree<A extends Comparable<A>> {
   @SuppressWarnings("unchecked")
   public static <A extends Comparable<A>> Tree<A> empty() {
     return E;
+  }
+
+  public static <A extends Comparable<A>> void inorder(Tree<A> tr) {
+    if(tr.isEmpty()) {
+      return;
+    }
+    inorder(tr.left());
+    System.out.println(tr.isB()?"Black":"Red"+" "+tr.value());
+    inorder(tr.right());
+  }
+  public static void main(String[] args) {
+
+    List lst = List.list();
+    Tree<Integer> tree = empty();
+    for(int i=1000; i>0; i--){
+      tree = tree.insert(i);
+    }
+    //Tree<Integer> tree = Tree.tree(lst);
+    System.out.println(tree);
+
+    //tree.insert(51);
+    inorder(tree);
+    System.out.println(tree.height());
   }
 }

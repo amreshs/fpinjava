@@ -19,7 +19,14 @@ public class MapEntry<K, V> implements Comparable<MapEntry<K, V>> {
 
   @Override
   public int compareTo(MapEntry<K, V> that) {
-    throw new IllegalStateException("To be implemented");
+    int thisKey = this.key.hashCode();
+    int thatKey = that.key.hashCode();
+
+    return thisKey < thatKey
+            ?-1
+            :thisKey > thatKey
+            ?1
+            :0;
   }
 
   @Override
