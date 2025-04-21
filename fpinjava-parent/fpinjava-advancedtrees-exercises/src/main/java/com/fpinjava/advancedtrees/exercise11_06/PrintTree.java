@@ -1,4 +1,4 @@
-package com.fpinjava.advancedtrees.exercise11_05;
+package com.fpinjava.advancedtrees.exercise11_06;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,13 +7,13 @@ import java.util.List;
 public class PrintTree {
 
     public static <A extends Comparable<A>> void makeInorderTree(Heap<A> root,
-                                                                  Integer height, Integer row, Integer cols,
-                                                                  List<List<String>> ans, A dv) {
+                                                                 Integer height, Integer row, Integer cols,
+                                                                 List<List<String>> ans, A dv) {
         if (root.isEmpty()) {
             return;
         }
 
-        Integer offset = Integer.valueOf((int) Math.pow(2, height - row - 1));
+        Integer offset = new Integer((int) Math.pow(2, height - row - 1));
 
         if(!root.isEmpty()) {
             makeInorderTree(root.left().getOrElse(Heap.empty()), height, Integer.valueOf(row + 1), Integer.valueOf(cols - offset), ans, dv);

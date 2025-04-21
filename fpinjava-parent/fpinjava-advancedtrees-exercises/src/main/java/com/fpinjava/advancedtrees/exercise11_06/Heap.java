@@ -23,6 +23,12 @@ public abstract class Heap<A extends Comparable<A>> {
     return merge(this, heap(element));
   }
 
+  public Integer height(Heap<A> heap) {
+    return heap.isEmpty()
+            ? -1
+            : Math.max(height(heap.left().getOrElse(() -> empty())),height(heap.right().getOrElse(() -> empty())))+1;
+  }
+
   public static class Empty<A extends Comparable<A>> extends Heap<A> {
 
     @Override
@@ -89,7 +95,7 @@ public abstract class Heap<A extends Comparable<A>> {
 
     @Override
     public Result<Heap<A>> tail() {
-      throw new IllegalStateException("To be implemented");
+      return Result.success(merge(left, right));
     }
 
     @Override
@@ -135,5 +141,25 @@ public abstract class Heap<A extends Comparable<A>> {
         .getOrElse(first.isEmpty()
             ? second
             : first);
+  }
+
+  public static void main(String[] args) {
+    Heap<Integer> root1 = new Heap.H<>(1, 1, empty(), 17 , empty());
+    root1 = root1.add(26).add(8).add(3).add(14).add(23).add(10).add(21);
+
+    Heap<Integer> root2 = new Heap.H<>(1, 1, empty(), 18, empty());
+    root2 = root2.add(12).add(24).add(33).add(6).add(37).add(7).add(18);
+
+    //Heap<Integer> rootFinal = merge(root1, root2);
+
+    PrintTree.print2DArray(PrintTree.treeToMatrix(root1, -1));
+
+    PrintTree.print2DArray(PrintTree.treeToMatrix(root2, -1));
+
+    Result<Heap<Integer>> root1_tail = root1.tail();
+    PrintTree.print2DArray(PrintTree.treeToMatrix(root1_tail.getOrElse(empty()), -1));
+
+    Result<Heap<Integer>> root2_tail = root2.tail();
+    PrintTree.print2DArray(PrintTree.treeToMatrix(root2_tail.getOrElse(empty()), -1));
   }
 }

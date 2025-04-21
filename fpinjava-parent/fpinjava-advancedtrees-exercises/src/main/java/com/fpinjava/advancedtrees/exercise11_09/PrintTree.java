@@ -1,4 +1,4 @@
-package com.fpinjava.advancedtrees.exercise11_05;
+package com.fpinjava.advancedtrees.exercise11_09;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,13 +7,13 @@ import java.util.List;
 public class PrintTree {
 
     public static <A extends Comparable<A>> void makeInorderTree(Heap<A> root,
-                                                                  Integer height, Integer row, Integer cols,
-                                                                  List<List<String>> ans, A dv) {
+                                                                 Integer height, Integer row, Integer cols,
+                                                                 List<List<String>> ans, A dv) {
         if (root.isEmpty()) {
             return;
         }
 
-        Integer offset = Integer.valueOf((int) Math.pow(2, height - row - 1));
+        Integer offset = new Integer((int) Math.pow(2, height - row - 1));
 
         if(!root.isEmpty()) {
             makeInorderTree(root.left().getOrElse(Heap.empty()), height, Integer.valueOf(row + 1), Integer.valueOf(cols - offset), ans, dv);
@@ -28,10 +28,10 @@ public class PrintTree {
     }
 
     public static<A extends Comparable<A>> List<List<String>> treeToMatrix(Heap<A> root, A dv) {
-        Integer height = root.height(root);
+        Integer height = Integer.valueOf(root.height());
         Integer rows = Integer.valueOf(height + 1);
 
-        Integer cols = new Integer((int) Math.pow(2, height+1) -1 );
+        Integer cols =  Integer.valueOf((int) Math.pow(2, height+1) -1 );
 
         List<List<String>> ans = new ArrayList<>();
         for(int i = 0; i < rows; i++) {
@@ -39,7 +39,7 @@ public class PrintTree {
             ans.add(row);
         }
 
-        makeInorderTree(root, height, Integer.valueOf(0), Integer.valueOf(cols/2), ans, dv);
+        makeInorderTree(root, height, 0, cols/2, ans, dv);
 
         return ans;
     }

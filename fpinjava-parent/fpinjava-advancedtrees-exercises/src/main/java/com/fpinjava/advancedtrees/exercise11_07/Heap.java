@@ -33,7 +33,7 @@ public abstract class Heap<A extends Comparable<A>> {
 
     @Override
     public Result<A> get(int index) {
-      throw new IllegalStateException("To be implemented");
+      return Result.failure(new NoSuchElementException("get method is called on empty heap"));
     }
 
     @Override
@@ -90,7 +90,10 @@ public abstract class Heap<A extends Comparable<A>> {
 
     @Override
     public Result<A> get(int index) {
-      throw new IllegalStateException("To be implemented");
+
+      return index == 0
+              ?head()
+              :tail().flatMap(itm -> itm.get(index-1));
     }
 
     @Override
@@ -146,5 +149,17 @@ public abstract class Heap<A extends Comparable<A>> {
         .getOrElse(first.isEmpty()
             ? second
             : first);
+  }
+
+  public static void main(String[] args) {
+    Heap<Integer> root1 = new Heap.H<>(1, 1, empty(), 17 , empty());
+    root1 = root1.add(26).add(8).add(3).add(14).add(23).add(10).add(21);
+
+    System.out.println(root1.get(4).getOrElse(new Integer(-1)));
+
+    Heap<Integer> root2 = new Heap.H<>(1, 1, empty(), 18, empty());
+    root2 = root2.add(12).add(24).add(33).add(6).add(37).add(7).add(18);
+
+    System.out.println(root1.get(5).getOrElse(new Integer(-1)));
   }
 }
